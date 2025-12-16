@@ -1,0 +1,116 @@
+{
+  "product-category": [
+    {
+      "name": "Tea",
+      "slug": "tea",
+      "tea-type": [
+      {
+        "name": "Green Tea",
+        "slug": "green-tea",
+        "id": 1,
+        "description":
+          "Green tea description.",
+        "products": [
+          {
+            "name": "Mint Green Tea",
+            "slug": "mint-green-tea",
+            "id":1,
+            "price": 12.99,
+            "description":
+              "Description about mint green tea."
+          },
+          {
+            "name": "Fruit Green Tea",
+            "slug": "fruit-green-tea",
+            "id":2,
+            "price": 14.99,
+            "description":
+              "Description about fruit green tea."
+          }
+        ]
+      },
+      {
+        "name": "Black Tea",
+        "slug": "black-tea",
+        "id": 1,
+        "description":
+          "Black tea description.",
+        "products": [
+          {
+            "name": "Lemon Black Tea",
+            "slug": "lemon-black-tea",
+            "id":1,
+            "price": 13.99,
+            "description":
+              "Description about lemon black tea."
+          },
+          {
+            "name": "Organic Black Tea",
+            "slug": "organic-black-tea",
+            "id":2,
+            "price": 10.99,
+            "description":
+              "Description about organic black tea."
+          }
+        ]
+      }
+    ]
+    },
+    {
+      "name": "Teapot",
+      "slug": "teapot",
+      "teapot-type": [
+        {
+          "name": "Ceramic",
+          "slug": "ceramic",
+          "id": 1,
+          "description":
+            "Ceramic teapot description.",
+          "products": [
+            {
+              "name": "Blue Ceramic Teapot",
+              "slug": "blue-ceramic-teapot",
+              "id":1,
+              "price": 24.99,
+              "description":
+                "A beautiful blue ceramic teapot."
+            },
+            {
+              "name": "Red Ceramic Teapot",
+              "slug": "red-ceramic-teapot",
+              "id":2,
+              "price": 22.99,
+              "description":
+                "A vibrant red ceramic teapot."
+            }
+          ]
+        },
+        {
+          "name": "Glass",
+          "slug": "glass",
+          "id": 2,
+          "description":
+            "Glass teapot description.",
+          "products": [
+            {
+              "name": "Clear Glass Teapot",
+              "slug": "clear-glass-teapot",
+              "id":1,
+              "price": 29.99,
+              "description":
+                "A sleek clear glass teapot."
+            },
+            {
+              "name": "Colored Glass Teapot",
+              "slug": "colored-glass-teapot",
+              "id":2,
+              "price": 27.99,
+              "description":
+                "A colorful glass teapot."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
