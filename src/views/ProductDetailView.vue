@@ -4,11 +4,13 @@
     <!-- product image -->
      <p>{{ product.description }}</p>
     <strong>Price: {{ product.price }}</strong>
+    <button @click="cart.addToCart(product)">Add to Cart</button>
   </div>
 </template>
 
 <script>
 import productsData from '../temp_data.json'
+import { useCartStore } from '@/stores/cart'
 
 export default {
   name: 'ProductDetailView',
@@ -29,6 +31,7 @@ export default {
   },
   created() {
     this.fetchProduct();
+    this.cart = useCartStore();
   },
   methods: {
     fetchProduct() {
