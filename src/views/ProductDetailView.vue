@@ -1,10 +1,14 @@
 <template>
-  <div>
-    <h5>{{ product.name }}</h5>
-    <!-- product image -->
-     <p>{{ product.description }}</p>
-    <strong>Price: {{ product.price }}</strong>
-    <button @click="cart.addToCart(product)">Add to Cart</button>
+  <div class="product_detail">
+    <div class="product_detail_image">
+      <img :src="product.image" :alt="product.name" />
+    </div>
+    <div class="product_detail_info">
+      <h1 class="product_detail_name">{{ product.name }}</h1>
+      <p class="product_description">{{ product.description }}</p>
+      <strong class="product_detail_price">Price: {{ product.price }}€</strong>
+      <button @click="cart.addToCart(product)">Add to Cart</button>
+    </div>
   </div>
 </template>
 
@@ -62,5 +66,57 @@ export default {
     },
   },
 };
-
 </script>
+
+<style scoped>
+.product_detail {
+  display: flex;
+  gap: 5rem;
+  max-width: 900px;
+  margin: 200px auto;
+  align-items: center;
+}
+
+.product_detail_image img {
+  width: 400px;
+  height: auto;
+  border-radius: 8px;
+}
+
+.product_detail_info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.product_detail_name {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.product_description {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.product_detail_price {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.product_detail button {
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.product_detail button:hover {
+  background-color: #555;
+}
+</style>

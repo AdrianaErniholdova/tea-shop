@@ -1,6 +1,6 @@
 <template>
   <TheNavigation />
-  <RouterView :key="$route.fullPath" />
+  <RouterView />
 </template>
 
 <script>
@@ -13,7 +13,7 @@ export default {
     TheNavigation
   },
 
-  setup() {
+  mounted() {
     const cart = useCartStore();
     cart.loadFromLocalStorage();
   }

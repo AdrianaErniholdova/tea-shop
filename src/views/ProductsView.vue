@@ -1,6 +1,6 @@
 <template>
   <!-- Filter Sidebar -->
-  <div>
+  <div class="products_grid">
     <RouterLink v-for="product in products" :key="product.slug" :to="{ name: 'ProductDetail', params: { category: category, productSlug: product.slug } }">
       <ProductCard :product="product" />
     </RouterLink>
@@ -26,6 +26,11 @@ export default {
     return {
       products: [],
     };
+  },
+  watch: {
+    category() {
+      this.fetchProducts()
+    }
   },
   created() {
     this.fetchProducts();
@@ -54,3 +59,15 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.products_grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items:center;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  margin-top: 6rem;
+}
+</style>

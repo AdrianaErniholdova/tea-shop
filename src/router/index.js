@@ -1,6 +1,5 @@
 import AboutView from '@/views/AboutView.vue'
 import HomeView from '@/views/HomeView.vue'
-import CategoryView from '@/views/CategoryView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import ProductsView from '@/views/ProductsView.vue'
 
@@ -13,11 +12,6 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/products',
-      name: 'products',
-      component: CategoryView
-    },
-    {
       path: '/about',
       name: 'about',
       component: AboutView
@@ -28,10 +22,12 @@ const router = createRouter({
       component: () => import('@/views/CartView.vue')
     },
     {
-      path: '/products/:category',
-      name: 'product-category',
+      path: '/products/:category?',
+      name: 'products',
       component: ProductsView,
-      props: true
+      props: route => ({
+        category: route.params.category || 'tea'
+      })
     },
     {
       path: '/products/:category/:productSlug',

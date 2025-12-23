@@ -13,7 +13,8 @@
         "products": [
           {
             "name": "Mint Green Tea",
-            "slug": "mint-green-tea",
+            "slug": "mint-green-tea", 
+            "image": "/images/mint_green.png",
             "id":1,
             "price": 12.99,
             "description":
@@ -22,6 +23,7 @@
           {
             "name": "Fruit Green Tea",
             "slug": "fruit-green-tea",
+            "image": "/images/sencha_green.png",
             "id":2,
             "price": 14.99,
             "description":
@@ -39,6 +41,7 @@
           {
             "name": "Lemon Black Tea",
             "slug": "lemon-black-tea",
+            "image": "/images/lemon_black.png",
             "id":1,
             "price": 13.99,
             "description":
@@ -47,6 +50,7 @@
           {
             "name": "Organic Black Tea",
             "slug": "organic-black-tea",
+            "image": "/images/pure_black.png",
             "id":2,
             "price": 10.99,
             "description":
