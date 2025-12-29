@@ -11,9 +11,64 @@
       </div>
     </div> 
   </div>
+
+  <section class="tea_picks">
+    <h2 class="tea_picks__title">Personalized Picks</h2>
+
+    <div class="tea_grid">
+      <ProductCard v-for="product in products" :key="product.slug" :product="product" :category="category" @add-to-cart="addToCart" />
+    </div>
+  </section>
 </template>
 
-<script></script>
+<script>
+import ProductCard from '@/components/ProductCard.vue';
+import productsData from '../temp_data.json'
+import { useCartStore } from '@/stores/cart'
+
+export default {
+  name: 'HomeView',
+  components: {
+    ProductCard,
+  },
+  data() {
+    return {
+      products: [],
+      cart: null,
+      category: 'tea',
+    };
+  },
+  watch: {
+    category() {
+      this.fetchProducts()
+    }
+  },
+  created() {
+    this.fetchProducts();
+    this.cart = useCartStore()
+  },
+  methods: {
+    fetchProducts() {
+      const productType = productsData['product-category'].find(
+        (type) => type.slug === this.category
+      )
+
+      if (!productType) {
+        this.products = [];
+        return;
+      }
+
+      if (this.category === 'tea') {
+        const teaTypes = productType['tea-type'] || []
+        this.products = teaTypes.flatMap((teaType) => teaType.products)
+      }
+    },
+    addToCart(product) {
+      this.cart.addToCart(product)
+    },
+  },
+};
+</script>
 
 <style scoped>
 .hero_section {
@@ -83,13 +138,9 @@
   box-shadow: 0 6px 16px rgba(138, 157, 133, 0.35);
 }
 
-/* RESPONSIVE */
-
-/* Tablet - šálka sa začína posúvať do stredu */
 @media (max-width: 1400px) {
-
   .hero_section_image {
-    object-position: 60% center; /* Šálka bližšie ku stredu */
+    object-position: 60% center;
   }
 
   .hero_content {
@@ -111,7 +162,6 @@
   }
 }
 
-/* Mobile Large - text nad šálkou */
 @media (max-width: 768px) {
   .hero_section {
     height: auto;
@@ -120,7 +170,7 @@
   }
 
   .hero_section_image {
-    object-position: center 60%; /* Šálka v strede, trochu nižšie */
+    object-position: center 60%;
   }
 
   .hero_overlay {
@@ -140,7 +190,6 @@
   }
 }
 
-/* Mobile Medium - text hore, zoom na šálku */
 @media (max-width: 640px) {
   .hero_section {
     min-height: 500px;
@@ -155,7 +204,7 @@
   .hero_overlay {
     padding-top: 2rem;
     background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(6px); /* hlavný blur efekt */
+    backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     align-items: center;
   }
@@ -166,7 +215,6 @@
   }
 }
 
-/* Mobile Small - ešte väčší zoom */
 @media (max-width: 480px) {
   .hero_section {
     min-height: 450px;
@@ -179,8 +227,7 @@
   }
 
   .hero_overlay {
-    
-    backdrop-filter: blur(10px); /* hlavný blur efekt */
+    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(6px);
     padding-top: 1.5rem;
   } 
@@ -195,7 +242,6 @@
   }
 }
 
-/* Extra Small - maximálny zoom na šálku */
 @media (max-width: 360px) {
   .hero_section {
     min-height: 400px;
@@ -213,10 +259,25 @@
   }
 
   .hero_overlay {
-    
-    backdrop-filter: blur(10px); /* hlavný blur efekt */
+    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(6px);
     padding-top: 1rem;
   }
+}
+
+.tea_picks {
+  margin: 4rem 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.tea_grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
 }
 </style>

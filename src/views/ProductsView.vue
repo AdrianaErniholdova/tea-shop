@@ -1,15 +1,14 @@
 <template>
   <!-- Filter Sidebar -->
   <div class="products_grid">
-    <RouterLink v-for="product in products" :key="product.slug" :to="{ name: 'ProductDetail', params: { category: category, productSlug: product.slug } }">
-      <ProductCard :product="product" />
-    </RouterLink>
+    <ProductCard v-for="product in products" :key="product.slug" :product="product" :category="category" @add-to-cart="addToCart" />
   </div>
 </template>
 
 <script>
 import ProductCard from '@/components/ProductCard.vue';
 import productsData from '../temp_data.json'
+import { useCartStore } from '@/stores/cart'
 
 export default {
   name: 'ProductsView',
@@ -25,6 +24,7 @@ export default {
   data() {
     return {
       products: [],
+      cart: null,
     };
   },
   watch: {
@@ -33,7 +33,8 @@ export default {
     }
   },
   created() {
-    this.fetchProducts();
+    this.fetchProducts(),
+    this.cart = useCartStore()
   },
   methods: {
     fetchProducts() {
@@ -56,6 +57,9 @@ export default {
         this.products = teapotTypes.flatMap((teapotType) => teapotType.products)
       }
     },
+    addToCart(product) {
+      this.cart.addToCart(product)
+    },
   },
 };
 </script>
@@ -66,7 +70,7 @@ export default {
   flex-wrap: wrap;
   align-items:center;
   justify-content: center;
-  gap: 2rem;
+  gap: 1rem;
   margin-bottom: 3rem;
   margin-top: 6rem;
 }

@@ -1,7 +1,12 @@
 <template>
-  <div class="product_card">
+  <div class="product_card" @click="goToDetail">
     <div class="product_card_image_container">
       <img :src="product.image" :alt="product.name" class="product_card_image"/>
+      <div class="product_card_overlay">
+        <Button variant="primary" @click.stop="addToCart">
+          Add to cart
+        </Button>
+      </div>
     </div>
     <div class="product_card_content">
       <h5>{{ product.name }}</h5>
@@ -11,12 +16,36 @@
 </template>
 
 <script>
+import Button from './Button.vue';
+
 export default {
   name: 'ProductCard',
+  components: {
+    Button,
+  },
   props: {
     product: {
       type: Object,
       required: true,
+    },
+    category: {
+      type: String,
+      required: true,
+    },
+  },
+  emits: ['add-to-cart'],
+  methods: {
+    goToDetail() {
+      this.$router.push({
+        name: 'ProductDetail',
+        params: {
+          category: this.category,
+          productSlug: this.product.slug,
+        },
+      })
+    },
+    addToCart() {
+      this.$emit('add-to-cart', this.product)
     },
   },
 };
@@ -25,14 +54,12 @@ export default {
 <style scoped>
 .product_card {
   background: #fafbf9;
-  overflow: hidden;
   transition: all 0.4s ease;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
   max-width: 300px;
-  margin: 0 auto;
 }
 
 .product_card:hover {
@@ -44,7 +71,6 @@ export default {
   position: relative;
   width: 80%;
   aspect-ratio: 1;
-  overflow: hidden;
   margin-top: 2rem;
 }
 
@@ -92,5 +118,22 @@ export default {
   .product_card_content span {
     font-size: 0.85rem;
   }
+}
+
+.product_card_overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+.product_card:hover .product_card_overlay {
+  opacity: 1;
+  pointer-events: auto;
 }
 </style>

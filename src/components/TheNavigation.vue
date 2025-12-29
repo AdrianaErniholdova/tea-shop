@@ -14,7 +14,7 @@
       </div>
 
       <RouterLink to="/cart" class="nav_cart">
-        🛒
+        <svg-icon type="mdi" :path="path"></svg-icon>
       </RouterLink>
 
       <button class="nav_hamburger" @click="toggleMenu">
@@ -27,13 +27,19 @@
 </template>
 
 <script>
+import SvgIcon from '@jamescoyle/vue-icon';
+import { mdilCart } from '@mdi/light-js';
 
 export default {
   name: 'TheNavigation',
+  components: {
+    SvgIcon,
+  },
 
   data() {
     return {
       menuOpen: false,
+      path: mdilCart
     };
   },
 
@@ -49,7 +55,6 @@ export default {
 </script>
 
 <style scoped>
-/* NAV BAR */
 .nav {
   position: fixed;
   top: 0;
@@ -69,7 +74,6 @@ export default {
   align-items: center;
 }
 
-/* LOGO */
 .nav_logo {
   display: flex;
   align-items: center;
@@ -80,7 +84,6 @@ export default {
   font-size: 1.2rem;
 }
 
-/* MENU */
 .nav_menu {
   display: flex;
   gap: 2rem;
@@ -97,7 +100,6 @@ export default {
   color: #1f3d2b;
 }
 
-/* ACTIVE UNDERLINE */
 .nav_link.router-link-active {
   color: #1f3d2b;
 }
@@ -114,22 +116,25 @@ export default {
   border-radius: 2px;
 }
 
-/* CART */
 .nav_cart {
   justify-self: end;
   text-decoration: none;
-  padding: 0.4rem 1rem;
+  padding: 0.4rem 0.5rem 0.2rem 0.5rem;
   border-radius: 20px;
   border: 1px solid #7c9c89;
   color: #1f3d2b;
   transition: background 0.3s;
 }
 
+.nav_cart svg {
+  filter: drop-shadow(0 0 0 currentColor)
+          drop-shadow(0 0 0 currentColor);
+}
+
 .nav_cart:hover {
   background: #e2ebe4;
 }
 
-/* HAMBURGER */
 .nav_hamburger {
   display: none;
   flex-direction: column;
@@ -146,7 +151,6 @@ export default {
   background: #1f3d2b;
 }
 
-/* MOBILE */
 @media (max-width: 768px) {
   .nav_menu {
     position: fixed;
