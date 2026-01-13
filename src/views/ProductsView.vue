@@ -1,13 +1,12 @@
 <template>
   <!-- Filter Sidebar -->
   <div class="products_grid">
-    <ProductCard v-for="product in products" :key="product.slug" :product="product" :category="category" @add-to-cart="addToCart" />
+    <ProductCard v-for="product in products" :key="product.slug" :product="product" @add-to-cart="addToCart" />
   </div>
 </template>
 
 <script>
-import ProductCard from '@/components/ProductCard.vue';
-import productsData from '../temp_data.json'
+import ProductCard from '@/components/ProductCard.vue'
 import { useCartStore } from '@/stores/cart'
 
 export default {
@@ -15,22 +14,11 @@ export default {
   components: {
     ProductCard,
   },
-  props: {
-    category: {
-      type: String,
-      required: true,
-    },
-  },
   data() {
     return {
       products: [],
       cart: null,
     };
-  },
-  watch: {
-    category() {
-      this.fetchProducts()
-    }
   },
   created() {
     this.fetchProducts(),
@@ -38,24 +26,14 @@ export default {
   },
   methods: {
     fetchProducts() {
-      const productType = productsData['product-category'].find(
-        (type) => type.slug === this.category
-      )
-
-      if (!productType) {
-        this.products = [];
-        return;
-      }
-
-      if (this.category === 'tea') {
-        const teaTypes = productType['tea-type'] || []
-        this.products = teaTypes.flatMap((teaType) => teaType.products)
-      }
-
-      if (this.category === 'teapot') {
-        const teapotTypes = productType['teapot-type'] || []
-        this.products = teapotTypes.flatMap((teapotType) => teapotType.products)
-      }
+      fetch('/api/products')
+        .then(res => res.json())
+        .then(data => {
+          this.products = data
+        })
+        .catch(err => {
+          console.error('Fetch products error:', err)
+        })
     },
     addToCart(product) {
       this.cart.addToCart(product)

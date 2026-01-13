@@ -17,24 +17,21 @@ const router = createRouter({
       component: AboutView
     },
     {
+      path: '/products',
+      name: 'products',
+      component: ProductsView
+    },
+    {
+      path: '/products/:productSlug',
+      name: 'product-detail',
+      component: () => import('@/views/ProductDetailView.vue'),
+      props: true
+    },
+    {
       path: '/cart',
       name: 'cart',
       component: () => import('@/views/CartView.vue')
     },
-    {
-      path: '/products/:category?',
-      name: 'products',
-      component: ProductsView,
-      props: route => ({
-        category: route.params.category || 'tea'
-      })
-    },
-    {
-      path: '/products/:category/:productSlug',
-      name: 'ProductDetail',
-      component: () => import('@/views/ProductDetailView.vue'),
-      props: true
-    }
   ]
 })
 

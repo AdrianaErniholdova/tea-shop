@@ -1,7 +1,7 @@
 <template>
   <div class="product_card" @click="goToDetail">
     <div class="product_card_image_container">
-      <img :src="product.image" :alt="product.name" class="product_card_image"/>
+      <img :src="`/${product.image_url}`" :alt="product.name" class="product_card_image"/>
       <div class="product_card_overlay">
         <Button variant="primary" @click.stop="addToCart">
           Add to cart
@@ -28,10 +28,6 @@ export default {
       type: Object,
       required: true,
     },
-    category: {
-      type: String,
-      required: true,
-    },
   },
   emits: ['add-to-cart'],
   methods: {
@@ -39,7 +35,6 @@ export default {
       this.$router.push({
         name: 'ProductDetail',
         params: {
-          category: this.category,
           productSlug: this.product.slug,
         },
       })
