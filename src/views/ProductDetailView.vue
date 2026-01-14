@@ -1,28 +1,31 @@
 <template>
   <div class="product_detail">
     <div class="product_detail_image">
-      <img :src="product.image" :alt="product.name" />
+      <img :src="`/${product.image_url}`" :alt="product.name" />
     </div>
     <div class="product_detail_info">
-      <h1 class="product_detail_name">{{ product.name }}</h1>
-      <p class="product_description">{{ product.description }}</p>
-      <strong class="product_detail_price">Price: {{ product.price }}€</strong>
-      <button @click="cart.addToCart(product)">Add to Cart</button>
+      <div class="product_detail_header">
+        <h1 class="product_detail_name">{{ product.name }}</h1>
+        <p class="product_detail_subtitle">{{ product.subtitle }}</p>
+      </div>
+      <div class="product_detail_subheader">
+        <strong class="product_detail_price">{{ product.price }}€</strong>
+        <button @click="cart.addToCart(product)">Add to Cart</button>
+      </div>
     </div>
+  </div>
+  <div class="product_desc">
+    <h4>Description</h4>
+    <p>{{ product.description }}</p>
   </div>
 </template>
 
 <script>
-import productsData from '../temp_data.json'
 import { useCartStore } from '@/stores/cart'
 
 export default {
   name: 'ProductDetailView',
   props: {
-    category: {
-      type: String,
-      required: true,
-    },
     productSlug: {
       type: String,
       required: true,
@@ -34,36 +37,20 @@ export default {
     };
   },
   created() {
-    this.fetchProduct();
-    this.cart = useCartStore();
+    this.cart = useCartStore()
+    this.fetchProduct()
   },
   methods: {
-    fetchProduct() {
-      const productType = productsData['product-category'].find(
-        (type) => type.slug === this.category
-      );
-
-      if (!productType) {
-        this.product = null;
-        return;
+    async fetchProduct() {
+      try {
+        const res = await fetch('/api/products')
+        const products = await res.json()
+        this.product = products.find(p => p.slug === this.productSlug) || null
+      } catch (err) {
+        console.error('Error fetching product:', err)
+        this.product = null
       }
-
-      let allProducts = [];
-
-      if (this.category === 'tea') {
-        const teaTypes = productType['tea-type'] || [];
-        allProducts = teaTypes.flatMap((teaType) => teaType.products);
-      }
-
-      if (this.category === 'teapot') {
-        const teapotTypes = productType['teapot-type'] || [];
-        allProducts = teapotTypes.flatMap((teapotType) => teapotType.products);
-      }
-
-      this.product = allProducts.find(
-        (prod) => prod.slug === this.productSlug
-      ) || null;
-    },
+    }
   },
 };
 </script>
@@ -95,7 +82,7 @@ export default {
   margin-bottom: 1rem;
 }
 
-.product_description {
+.product_detail_subtitle {
   font-size: 1rem;
   margin-bottom: 1.5rem;
   line-height: 1.5;

@@ -19,7 +19,7 @@ func ProductsHandler(db *sql.DB) http.HandlerFunc {
 		}
 
 		rows, err := db.Query(`
-			SELECT id, name, slug, price, image_url, stock
+			SELECT id, name, slug, subtitle, price, image_url, stock, description
 			FROM teas
 			ORDER BY name
 		`)
@@ -37,9 +37,11 @@ func ProductsHandler(db *sql.DB) http.HandlerFunc {
 				&p.ID,
 				&p.Name,
 				&p.Slug,
+				&p.Subtitle,
 				&p.Price,
 				&p.Image,
 				&p.Stock,
+				&p.Description,
 			); err != nil {
 				http.Error(w, "Scan error", http.StatusInternalServerError)
 				return

@@ -21,19 +21,17 @@ export default {
     };
   },
   created() {
-    this.fetchProducts(),
     this.cart = useCartStore()
+    this.fetchProducts()
   },
   methods: {
-    fetchProducts() {
-      fetch('/api/products')
-        .then(res => res.json())
-        .then(data => {
-          this.products = data
-        })
-        .catch(err => {
-          console.error('Fetch products error:', err)
-        })
+    async fetchProducts() {
+      try {       
+        const res = await fetch('/api/products')
+        this.products = await res.json()
+      } catch (err) {
+        console.error('Error fetching products:', err)
+      }
     },
     addToCart(product) {
       this.cart.addToCart(product)

@@ -33,7 +33,7 @@ export default {
   methods: {
     goToDetail() {
       this.$router.push({
-        name: 'ProductDetail',
+        name: 'product-detail',
         params: {
           productSlug: this.product.slug,
         },
