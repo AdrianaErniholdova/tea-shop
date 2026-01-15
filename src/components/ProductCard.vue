@@ -10,7 +10,7 @@
     </div>
     <div class="product_card_content">
       <h5>{{ product.name }}</h5>
-      <span>{{ product.price }}</span>
+      <span>{{ product.price }} €</span>
     </div>
   </div>
 </template>
@@ -54,7 +54,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 300px;
+  max-width: 400px;
 }
 
 .product_card:hover {

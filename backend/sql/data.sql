@@ -2,7 +2,7 @@ INSERT INTO types (name, slug) VALUES
 ('Green', 'green'),
 ('Black', 'black'),
 ('White', 'white'),
-('Oolong', 'oolong'),
+('Rooibos', 'rooibos'),
 ('Herbal', 'herbal');
 
 INSERT INTO origins (name, slug) VALUES
@@ -271,7 +271,7 @@ Use water at 75-80°C, steep 1 teaspoon per cup for 2-3 minutes. Never use boili
 $$
 ),
 
-('Pure Rooibos', 'pure-rooibos', 'South African treasure - naturally sweet, completely caffeine-free, endlessly comforting', 9.49, 'images/pure_rooibos.jpg', 30, 'none', 5, 4,
+('Pure Rooibos', 'pure-rooibos', 'South African treasure - naturally sweet, completely caffeine-free, endlessly comforting', 9.49, 'images/pure_rooibos.jpg', 30, 'none', 4, 4,
 $$
 ## Description
 This pure rooibos (red bush tea) from South Africa offers a naturally sweet, smooth taste with earthy, slightly nutty notes. Completely caffeine-free and low in tannins, perfect for any time of day or night.
@@ -319,7 +319,7 @@ Use water at 75-80°C, steep 1 teaspoon per cup for 2-3 minutes. Beautiful visua
 $$
 ),
 
-('Vanilla Rooibos', 'vanilla-rooibos', 'Liquid dessert without the guilt - creamy vanilla dreams in a caffeine-free cup', 9.99, 'images/vanilla_rooibos.jpg', 2, 'none', 5, 4,
+('Vanilla Rooibos', 'vanilla-rooibos', 'Liquid dessert without the guilt - creamy vanilla dreams in a caffeine-free cup', 9.99, 'images/vanilla_rooibos.jpg', 2, 'none', 4, 4,
 $$
 ## Description
 This indulgent blend combines naturally sweet rooibos with smooth vanilla, creating a dessert-like experience that's completely caffeine-free and naturally low in calories. Comfort in a cup, perfect any time.
