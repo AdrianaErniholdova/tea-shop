@@ -9,22 +9,40 @@
         <p class="product_detail_subtitle">{{ product.subtitle }}</p>
       </div>
       <div class="product_detail_subheader">
-        <strong class="product_detail_price">{{ product.price }}€</strong>
+        <div class="pricing">
+          <p>100g pack = </p>
+          <strong class="product_detail_price">{{ product.price }}€</strong>
+        </div>
         <button @click="cart.addToCart(product)">Add to Cart</button>
       </div>
     </div>
   </div>
-  <div class="product_desc">
-    <h4>Description</h4>
-    <p>{{ product.description }}</p>
+  <hr />
+  <div class="product_description" v-html="formattedDescription"></div>
+  <hr />
+  <div v-if="relatedProducts.length" class="related_products">
+    <h2>Related Products</h2>
+    <div class="products_grid">
+      <ProductCard
+        v-for="p in relatedProducts"
+        :key="p.slug"
+        :product="p"
+        @add-to-cart="cart.addToCart(p)"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import { useCartStore } from '@/stores/cart'
+import { marked } from 'marked'
+import ProductCard from '@/components/ProductCard.vue';
 
 export default {
   name: 'ProductDetailView',
+  components: {
+    ProductCard,
+  },
   props: {
     productSlug: {
       type: String,
@@ -34,7 +52,15 @@ export default {
   data() {
     return {
       product: null,
+      relatedProducts: [],
     };
+  },
+  computed: {
+    formattedDescription() {
+      return this.product
+        ? marked.parse(this.product.description)
+        : ''
+    }
   },
   created() {
     this.cart = useCartStore()
@@ -46,9 +72,21 @@ export default {
         const res = await fetch('/api/products')
         const products = await res.json()
         this.product = products.find(p => p.slug === this.productSlug) || null
+
+        if (this.product) {
+          this.relatedProducts = products.filter(p =>
+            p.slug !== this.product.slug &&
+            p.typeSlug === this.product.typeSlug &&
+            p.caffeineLevel === this.product.caffeineLevel
+          )
+          .slice(0, 4)
+        } else {
+          this.relatedProducts = []
+        }
       } catch (err) {
         console.error('Error fetching product:', err)
         this.product = null
+        this.relatedProducts = []
       }
     }
   },
@@ -59,22 +97,23 @@ export default {
 .product_detail {
   display: flex;
   gap: 5rem;
-  max-width: 900px;
-  margin: 200px auto;
+  max-width: 1300px;
+  margin: 200px auto 100px auto;
   align-items: center;
+  justify-content: center;
 }
 
 .product_detail_image img {
   width: 400px;
   height: auto;
-  border-radius: 8px;
+  margin-left: 6rem;
 }
 
 .product_detail_info {
   flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  max-width: 500px;
 }
 
 .product_detail_name {
@@ -105,5 +144,70 @@ export default {
 
 .product_detail button:hover {
   background-color: #555;
+}
+
+.product_detail_subheader {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-bottom: 2rem;
+}
+
+.pricing {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.product_description {
+  max-width: 1400px;
+  margin: 50px auto 4rem;
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.product_description :deep(h2) {
+  font-family: var(--font-sans);
+  font-size: 1.1rem;
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 1100px) {
+  .product_detail {
+    flex-direction: column;
+    margin: 150px auto 50px auto;
+    padding: 0 2rem;
+  }
+  .product_detail_subheader {
+    align-items: center;
+  }
+  .product_detail_image img {
+    width: 100%;
+    max-width: 400px;
+    margin-left: 0;
+  }
+}
+
+.related_products {
+  margin: 4rem 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.products_grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  max-width: 1300px;
 }
 </style>

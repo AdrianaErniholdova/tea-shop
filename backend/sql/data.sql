@@ -1,16 +1,16 @@
-INSERT INTO types (name) VALUES 
-('green'),
-('black'),
-('white'),
-('oolong'),
-('herbal');
+INSERT INTO types (name, slug) VALUES 
+('Green', 'green'),
+('Black', 'black'),
+('White', 'white'),
+('Oolong', 'oolong'),
+('Herbal', 'herbal');
 
-INSERT INTO origins (name) VALUES
-('Japan'),
-('China'),
-('India'),
-('Sri Lanka'),
-('Nepal');
+INSERT INTO origins (name, slug) VALUES
+('Japan', 'japan'),
+('China', 'china'),
+('India', 'india'),
+('Sri Lanka', 'sri-lanka'),
+('Nepal', 'nepal');
 
 INSERT INTO teas
 (name, slug, subtitle, price, image_url, stock, caffeine_level, type_id, origin_id, description)

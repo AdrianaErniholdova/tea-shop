@@ -19,9 +19,10 @@ func ProductsHandler(db *sql.DB) http.HandlerFunc {
 		}
 
 		rows, err := db.Query(`
-			SELECT id, name, slug, subtitle, price, image_url, stock, description
-			FROM teas
-			ORDER BY name
+			SELECT ts.id, ts.name, ts.slug, ts.subtitle, ts.price, ts.image_url, ts.stock, ts.description, ts.caffeine_level, t.name, t.slug, o.name, o.slug
+			FROM teas ts
+			JOIN types t ON ts.type_id = t.id
+			JOIN origins o ON ts.origin_id = o.id
 		`)
 		if err != nil {
 			log.Println("DB query failed:", err)
@@ -42,6 +43,11 @@ func ProductsHandler(db *sql.DB) http.HandlerFunc {
 				&p.Image,
 				&p.Stock,
 				&p.Description,
+				&p.CaffeineLevel,
+				&p.TypeName,
+				&p.TypeSlug,
+				&p.OriginName,
+				&p.OriginSlug,
 			); err != nil {
 				http.Error(w, "Scan error", http.StatusInternalServerError)
 				return

@@ -29,6 +29,7 @@ CREATE TABLE public.origins
 (
     id serial NOT NULL,
     name text NOT NULL,
+    slug text NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -36,6 +37,7 @@ CREATE TABLE public.types
 (
     id serial NOT NULL,
     name text NOT NULL,
+    slug text NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -45,7 +47,7 @@ CREATE TABLE public.orders
     customer_name text NOT NULL,
     customer_email text NOT NULL,
     total numeric(10, 2) NOT NULL,
-	  created_at timestamp DEFAULT now(),
+	created_at timestamp DEFAULT now(),
     PRIMARY KEY (id)
 );
 
