@@ -20,10 +20,13 @@ func ProductsHandler(db *sql.DB) http.HandlerFunc {
 		}
 
 		rows, err := db.Query(`
-			SELECT ts.id, ts.name, ts.slug, ts.subtitle, ts.price, ts.image_url, ts.stock, ts.description, ts.caffeine_level, t.name, t.slug, o.name, o.slug
+			SELECT ts.id, ts.name, ts.slug, ts.subtitle, ts.price, ts.image_url, ts.stock, ts.description, ts.caffeine_level, t.name, t.slug, o.name, o.slug, COALESCE(SUM(oi.quantity), 0) AS total_sold
 			FROM teas ts
 			JOIN types t ON ts.type_id = t.id
 			JOIN origins o ON ts.origin_id = o.id
+			LEFT JOIN order_items oi ON ts.id = oi.tea_id
+			GROUP BY ts.id, t.id, o.id
+			ORDER BY ts.name;
 		`)
 		if err != nil {
 			log.Println("DB query failed:", err)
@@ -49,6 +52,7 @@ func ProductsHandler(db *sql.DB) http.HandlerFunc {
 				&p.TypeSlug,
 				&p.OriginName,
 				&p.OriginSlug,
+				&p.TotalSold,
 			); err != nil {
 				http.Error(w, "Scan error", http.StatusInternalServerError)
 				return

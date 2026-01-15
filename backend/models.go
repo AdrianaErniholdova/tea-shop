@@ -14,6 +14,7 @@ type Product struct {
 	TypeSlug      string  `json:"typeSlug"`
 	OriginName    string  `json:"originName"`
 	OriginSlug    string  `json:"originSlug"`
+	TotalSold     int     `json:"totalSold"`
 }
 
 type OrderItem struct {

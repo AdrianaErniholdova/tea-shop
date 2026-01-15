@@ -13,17 +13,16 @@
   </div>
 
   <section class="tea_picks">
-    <h2 class="tea_picks__title">Personalized Picks</h2>
+    <h2 class="tea_picks__title">Our Best Selling Teas</h2>
 
     <div class="tea_grid">
-      <ProductCard v-for="product in products" :key="product.slug" :product="product" :category="category" @add-to-cart="addToCart" />
+      <ProductCard v-for="product in bestSellingTeas" :key="product.slug" :product="product" @add-to-cart="addToCart" />
     </div>
   </section>
 </template>
 
 <script>
 import ProductCard from '@/components/ProductCard.vue';
-import productsData from '../temp_data.json'
 import { useCartStore } from '@/stores/cart'
 
 export default {
@@ -35,32 +34,28 @@ export default {
     return {
       products: [],
       cart: null,
-      category: 'tea',
     };
   },
-  watch: {
-    category() {
-      this.fetchProducts()
+  computed: {
+    bestSellingTeas() {
+      return this.products
+        .slice()
+        .sort((a, b) => b.totalSold - a.totalSold)
+        .slice(0, 5)
     }
   },
-  created() {
-    this.fetchProducts();
+  async created() {
     this.cart = useCartStore()
+    await this.fetchProducts()
   },
   methods: {
-    fetchProducts() {
-      const productType = productsData['product-category'].find(
-        (type) => type.slug === this.category
-      )
-
-      if (!productType) {
-        this.products = [];
-        return;
-      }
-
-      if (this.category === 'tea') {
-        const teaTypes = productType['tea-type'] || []
-        this.products = teaTypes.flatMap((teaType) => teaType.products)
+    async fetchProducts() {
+      try {
+        const res = await fetch('/api/products')
+        const data = await res.json()
+        this.products = data
+      } catch (err) {
+        console.error('Failed to fetch products:', err)
       }
     },
     addToCart(product) {
