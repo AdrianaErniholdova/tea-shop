@@ -15,3 +15,16 @@ type Product struct {
 	OriginName    string  `json:"originName"`
 	OriginSlug    string  `json:"originSlug"`
 }
+
+type OrderItem struct {
+	TeaID    int     `json:"teaId"`
+	Quantity int     `json:"quantity"`
+	Price    float64 `json:"price"`
+}
+
+type OrderReq struct {
+	CustomerName  string      `json:"customerName"`
+	CustomerEmail string      `json:"customerEmail"`
+	Items         []OrderItem `json:"items"`
+	Total         float64     `json:"total"`
+}

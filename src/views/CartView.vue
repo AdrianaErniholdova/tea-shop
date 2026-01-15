@@ -35,7 +35,7 @@
           <span>{{ totalPrice }}€</span>
         </div>
 
-        <button class="checkout">Checkout</button>
+        <button class="checkout" @click="$router.push('/checkout')">Checkout</button>
       </div>
     </div>
   </div>
