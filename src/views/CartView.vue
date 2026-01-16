@@ -3,21 +3,29 @@
     <h1 class="cart_title">Your cart</h1>
     <div class="cart_content">
       <div class="cart_items">
-        <div class="cart_header">
-          <span>Product</span>
-          <span>Price</span>
-          <span>Quantity</span>
-          <span>Total</span>
+        <div v-if="cartItems.length === 0" class="cart_empty">
+          <p>Your cart is empty.</p>
+          <RouterLink to="/products" class="shop_link">
+            Continue shopping
+          </RouterLink>
         </div>
+        <template v-else>
+          <div class="cart_header">
+            <span>Product</span>
+            <span>Price</span>
+            <span>Quantity</span>
+            <span>Total</span>
+          </div>
 
-        <CartItem
-          v-for="item in cartItems"
-          :key="item.slug"
-          :item="item"
-          @increment="increment(item.slug)"
-          @decrement="decrement(item.slug)"
-          @remove="remove(item.slug)"
-        />
+          <CartItem
+            v-for="item in cartItems"
+            :key="item.slug"
+            :item="item"
+            @increment="increment(item.slug)"
+            @decrement="decrement(item.slug)"
+            @remove="remove(item.slug)"
+          />
+        </template>
       </div>
 
       <div class="cart_summary">
@@ -35,7 +43,7 @@
           <span>{{ totalPrice }}€</span>
         </div>
 
-        <button class="checkout" @click="$router.push('/checkout')">Checkout</button>
+        <button class="checkout" :disabled="cartItems.length === 0" @click="$router.push('/checkout')">Checkout</button>
       </div>
     </div>
   </div>
@@ -151,5 +159,25 @@ export default {
   color: white;
   border: none;
   cursor: pointer;
+}
+
+.cart_empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #6b6b6b;
+}
+
+.shop_link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #4b8f5d;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.checkout:disabled {
+  background: #b5b5b5;
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 </style>

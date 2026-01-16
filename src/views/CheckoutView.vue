@@ -34,6 +34,7 @@
 
 <script>
 import { useCartStore } from '@/stores/cart'
+import { useUiStore } from '@/stores/ui'
 
 export default {
   name: 'CheckoutView',
@@ -54,7 +55,6 @@ export default {
   methods: {
     async submitOrder() {
       if (!this.cartStore.items.length) {
-        alert('Your cart is empty!')
         return
       }
 
@@ -81,12 +81,16 @@ export default {
         if (!res.ok) throw new Error('Failed to create order')
 
         const data = await res.json()
-        alert(`Order #${data.orderId} successfully placed!`)
+
         this.cartStore.clearCart()
         this.$router.push('/')
+
       } catch (err) {
         console.error(err)
-        alert('Error submitting order. Please try again.')
+      
+        const ui = useUiStore()
+        ui.show('Failed to place order. Please try again.', 'error')
+        
       } finally {
         this.loading = false
       }

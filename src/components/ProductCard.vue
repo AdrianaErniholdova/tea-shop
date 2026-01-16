@@ -17,6 +17,7 @@
 
 <script>
 import Button from './Button.vue';
+import { useUiStore } from '@/stores/ui'
 
 export default {
   name: 'ProductCard',
@@ -41,6 +42,9 @@ export default {
     },
     addToCart() {
       this.$emit('add-to-cart', this.product)
+
+      const ui = useUiStore()
+      ui.show('Product added to cart', 'success')
     },
   },
 };

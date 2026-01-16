@@ -49,7 +49,18 @@
       </div>
 
       <div class="products_grid">
-        <ProductCard
+
+        <div v-if="loading" class="empty_state">
+          Loading products...
+        </div>
+        <div v-else-if="error" class="empty_state">
+          {{ error }}
+        </div>
+        <div v-else-if="!error && filteredProducts.length === 0" class="empty_state">
+          No products match your selection.
+        </div>
+        
+        <ProductCard v-else
           v-for="product in sortedProducts"
           :key="product.slug"
           :product="product"
@@ -64,6 +75,7 @@
 import ProductCard from '@/components/ProductCard.vue'
 import { useCartStore } from '@/stores/cart'
 import { useFilterStore } from '@/stores/filter'
+import { useUiStore } from '@/stores/ui'
 
 export default {
   name: 'ProductsView',
@@ -75,19 +87,17 @@ export default {
       products: [],
       cart: null,
       filter: null,
+      loading: false,
+      error: null
     };
   },
 
   async created() {
     this.cart = useCartStore()
     this.filter = useFilterStore()
-
     this.filter.loadFromSession()
-
     this.filter.setFromRoute(this.$route.query)
-
     this.syncRoute()
-
     await this.fetchProducts()
   },
 
@@ -142,11 +152,19 @@ export default {
 
   methods: {
     async fetchProducts() {
+      this.loading = true
+      this.error = null
       try {       
         const res = await fetch('/api/products')
+        if (!res.ok) throw new Error('Failed to load products')
         this.products = await res.json()
       } catch (err) {
         console.error('Error fetching products:', err)
+        this.error = 'Unable to load products. Please try again later.'
+        const ui = useUiStore()
+        ui.show(this.error, 'error')
+      } finally {
+        this.loading = false
       }
     },
 

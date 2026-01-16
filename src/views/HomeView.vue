@@ -16,6 +16,7 @@
     <h2 class="tea_picks__title">Our Best Selling Teas</h2>
 
     <div class="tea_grid">
+      <div v-if="error" class="empty_state">{{ error }}</div>
       <ProductCard v-for="product in bestSellingTeas" :key="product.slug" :product="product" @add-to-cart="addToCart" />
     </div>
   </section>
@@ -24,6 +25,7 @@
 <script>
 import ProductCard from '@/components/ProductCard.vue';
 import { useCartStore } from '@/stores/cart'
+import { useUiStore } from '@/stores/ui'
 
 export default {
   name: 'HomeView',
@@ -34,6 +36,7 @@ export default {
     return {
       products: [],
       cart: null,
+      error: null,
     };
   },
   computed: {
@@ -52,10 +55,14 @@ export default {
     async fetchProducts() {
       try {
         const res = await fetch('/api/products')
+        if (!res.ok) throw new Error('Failed to fetch products')
         const data = await res.json()
         this.products = data
       } catch (err) {
         console.error('Failed to fetch products:', err)
+        this.error = 'Unable to load products. Please try again later.'
+        const ui = useUiStore()
+        ui.show(this.error, 'error')
       }
     },
     addToCart(product) {
