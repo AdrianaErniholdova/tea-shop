@@ -13,9 +13,12 @@
         <RouterLink to="/about" class="nav_link" @click="closeMenu">About</RouterLink>
       </div>
 
-      <RouterLink to="/cart" class="nav_cart">
-        <svg-icon type="mdi" :path="path"></svg-icon>
-      </RouterLink>
+      <div class="nav_actions">
+        <SearchBar />
+        <RouterLink to="/cart" class="nav_cart">
+          <svg-icon type="mdi" :path="path"></svg-icon>
+        </RouterLink>
+      </div>
 
       <button class="nav_hamburger" @click="toggleMenu">
         <span></span>
@@ -29,11 +32,13 @@
 <script>
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdilCart } from '@mdi/light-js';
+import SearchBar from './SearchBar.vue';
 
 export default {
   name: 'TheNavigation',
   components: {
     SvgIcon,
+    SearchBar
   },
 
   data() {
@@ -187,5 +192,12 @@ export default {
   .nav_hamburger {
     display: flex;
   }
+}
+
+.nav_actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
 }
 </style>

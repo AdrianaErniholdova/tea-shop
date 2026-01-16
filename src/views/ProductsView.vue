@@ -39,6 +39,9 @@
     <section class="products_section">
 
       <div class="sort_section">
+        <div v-if="filter.search" class="search-title">
+          Search results for "{{ filter.search }}"
+        </div>
         <label for="sort">Sort by:</label>
         <select id="sort" v-model="filter.sort">
           <option value="priceLowHigh">Price: Low to High</option>
@@ -127,7 +130,8 @@ export default {
         return (
           (this.filter.type.length === 0 || this.filter.type.includes(p.typeName)) &&
           (this.filter.caffeine.length === 0 || this.filter.caffeine.includes(p.caffeineLevel)) &&
-          (this.filter.origin.length === 0 || this.filter.origin.includes(p.originName))
+          (this.filter.origin.length === 0 || this.filter.origin.includes(p.originName)) &&
+          (!this.filter.search || p.name.toLowerCase().includes(this.filter.search.toLowerCase()))
         )
       })
     },
@@ -188,7 +192,7 @@ export default {
         query.origin = this.filter.origin.join(',')
       if (this.filter.sort)
         query.sort = this.filter.sort
-
+      if (this.filter.search) query.search = this.filter.search
       this.$router.replace({ query })
     },
   },
@@ -254,5 +258,13 @@ export default {
     flex-wrap: wrap;
     gap: 1rem;
   }
+}
+
+.search-title {
+  max-width: 1300px;
+  margin: auto;
+  padding: 0 2rem;
+  font-size: 1.2rem;
+  font-weight: 500;
 }
 </style>

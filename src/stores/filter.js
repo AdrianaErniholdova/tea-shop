@@ -6,6 +6,7 @@ export const useFilterStore = defineStore('filter', {
     caffeine: [],
     origin: [],
     sort: '',
+    search: '',
   }),
 
   actions: {
@@ -24,6 +25,7 @@ export const useFilterStore = defineStore('filter', {
           caffeine: this.caffeine,
           origin: this.origin,
           sort: this.sort,
+          search: this.search,
         })
       )
     },
@@ -33,6 +35,7 @@ export const useFilterStore = defineStore('filter', {
       this.caffeine = query.caffeine ? query.caffeine.split(',') : []
       this.origin = query.origin ? query.origin.split(',') : []
       this.sort = query.sort || ''
+      this.search = query.search || ''
       this.saveToSession()
     },
 
@@ -41,7 +44,13 @@ export const useFilterStore = defineStore('filter', {
       this.caffeine = []
       this.origin = []
       this.sort = ''
+      this.search = ''
       sessionStorage.removeItem('productFilters')
+    },
+
+    setSearch(query) {
+      this.search = query
+      this.saveToSession()
     },
   },
 })
