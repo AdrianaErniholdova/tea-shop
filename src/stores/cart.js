@@ -14,32 +14,34 @@ export const useCartStore = defineStore('cart', {
   },
 
   actions: {
-    addToCart(product) {
+    addToCart(product, quantity = 1) {
+      if (product.stock === 0) return;
+
       const existingItem = this.items.find(item => item.slug === product.slug)
 
       if (existingItem) {
-        existingItem.quantity += 1
+        const newQty = existingItem.quantity + quantity
+        existingItem.quantity = Math.min(newQty, product.stock)
       } else {
-        this.items.push({ ...product, quantity: 1 })
+        this.items.push({ ...product, quantity: Math.min(quantity, product.stock) })
       }
 
       this.saveToStorage()
     },
 
-    incrementQuantity(slug) {
-      const item = this.items.find(item => item.slug === slug)
-      if (item) {
-        item.quantity++
-        this.saveToStorage()
-      }
-    },
+    setQuantity(slug, quantity) {
+      const item = this.items.find(i => i.slug === slug)
+      if (!item) return
 
-    decrementQuantity(slug) {
-      const item = this.items.find(item => item.slug === slug)
-      if (item && item.quantity > 1) {
-        item.quantity--
-        this.saveToStorage()
+      const qty = Number(quantity)
+
+      if (qty < 1) {
+        this.removeFromCart(slug)
+      } else {
+        item.quantity = Math.min(qty, item.stock)
       }
+
+      this.saveToStorage()
     },
 
     removeFromCart(slug) {

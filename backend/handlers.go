@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -102,13 +103,39 @@ func OrdersHandler(db *sql.DB) http.HandlerFunc {
 		}
 
 		for _, item := range payload.Items {
-			_, err := tx.Exec(`
+			var currentStock int
+			err := tx.QueryRow("SELECT stock FROM teas WHERE id=$1", item.TeaID).Scan(&currentStock)
+			if err != nil {
+				tx.Rollback()
+				log.Println("Failed to get product stock:", err)
+				http.Error(w, "DB error", http.StatusInternalServerError)
+				return
+			}
+
+			if currentStock < item.Quantity {
+				tx.Rollback()
+				http.Error(w, fmt.Sprintf("Insufficient stock for product %d", item.TeaID), http.StatusBadRequest)
+				return
+			}
+			_, err = tx.Exec(`
                 INSERT INTO order_items (order_id, tea_id, quantity, price)
                 VALUES ($1, $2, $3, $4)
             `, orderID, item.TeaID, item.Quantity, item.Price)
 			if err != nil {
 				tx.Rollback()
 				log.Println("Failed to insert order item:", err)
+				http.Error(w, "DB error", http.StatusInternalServerError)
+				return
+			}
+
+			_, err = tx.Exec(`
+				UPDATE teas
+				SET stock = stock - $1
+				WHERE id = $2
+			`, item.Quantity, item.TeaID)
+			if err != nil {
+				tx.Rollback()
+				log.Println("Failed to update product stock:", err)
 				http.Error(w, "DB error", http.StatusInternalServerError)
 				return
 			}

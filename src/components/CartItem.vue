@@ -5,15 +5,17 @@
       <div class="cart_item_name">{{ item.name }}</div>
     </div>
 
-    <div class="cart_item_price">{{ item.price }}</div>
+    <div class="cart_item_price">{{ item.price.toFixed(2) }} €</div>
 
     <div class="cart_item_quantity">
-      <button @click="$emit('decrement')">-</button>
-      <span>{{ item.quantity }}</span>
-      <button @click="$emit('increment')">+</button>
+      <QuantitySelector
+        v-model="localQuantity"
+        :min="1"
+        :max="item.stock"
+      />
     </div>
 
-    <div class="cart_item_total">{{ item.price * item.quantity }}€</div>
+    <div class="cart_item_total">{{ (item.price * localQuantity).toFixed(2) }} €</div>
 
     <div class="cart_item_remove">
       <button @click="$emit('remove')">✕</button>
@@ -22,14 +24,33 @@
 </template>
 
 <script>
+import QuantitySelector from './QuantitySelector.vue'
+
 export default {
   name: 'CartItem',
+  components: {
+    QuantitySelector,
+  },
   props: {
     item: {
       type: Object,
       required: true,
     },
   },
+  emits: ['updateQuantity', 'remove'],
+  data() {
+    return {
+      localQuantity: Number(this.item.quantity) || 1,
+    }
+  },
+  watch: {
+    localQuantity(newVal) {
+      this.$emit('updateQuantity', { slug: this.item.slug, quantity: Number(newVal) })
+    },
+    'item.quantity'(newVal) {
+      this.localQuantity = Number(newVal)
+    }
+  }
 };
 </script>
 
@@ -56,15 +77,6 @@ export default {
 .cart_item_price,
 .cart_item_total {
   font-weight: 500;
-}
-
-.cart_item_quantity {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: #f3f5f3;
-  padding: 0.3rem 0.6rem;
-  border-radius: 20px;
 }
 
 .cart_item_quantity button {

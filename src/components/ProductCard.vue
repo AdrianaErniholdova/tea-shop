@@ -3,14 +3,20 @@
     <div class="product_card_image_container">
       <img :src="`/${product.image_url}`" :alt="product.name" class="product_card_image"/>
       <div class="product_card_overlay">
-        <Button variant="primary" @click.stop="addToCart">
+        <Button variant="primary" @click.stop="addToCart" :disabled="product.stock === 0 || cartQuantity >= product.stock">
           Add to cart
         </Button>
       </div>
     </div>
     <div class="product_card_content">
       <h5>{{ product.name }}</h5>
-      <span>{{ product.price }} €</span>
+        <div class="product_card_price_stock">
+          <span>{{ product.price }} €</span>
+
+          <p v-if="product.stock === 0" class="stock out_of_stock">Out of stock</p>
+          <p v-else-if="product.stock === 1" class="stock only_one">Only 1 left</p>
+          <p v-else-if="product.stock > 1 && product.stock < 4" class="stock low_stock">Low in stock</p>
+        </div>
     </div>
   </div>
 </template>
@@ -18,6 +24,7 @@
 <script>
 import Button from './Button.vue';
 import { useUiStore } from '@/stores/ui'
+import { useCartStore } from '@/stores/cart'
 
 export default {
   name: 'ProductCard',
@@ -31,6 +38,13 @@ export default {
     },
   },
   emits: ['add-to-cart'],
+  computed: {
+    cartQuantity() {
+      const cart = useCartStore()
+      const item = cart.items.find(i => i.slug === this.product.slug)
+      return item ? item.quantity : 0
+    }
+  },
   methods: {
     goToDetail() {
       this.$router.push({
@@ -41,6 +55,8 @@ export default {
       })
     },
     addToCart() {
+      if (this.product.stock === 0 || this.cartQuantity >= this.product.stock) return;
+
       this.$emit('add-to-cart', this.product)
 
       const ui = useUiStore()
@@ -134,5 +150,30 @@ export default {
 .product_card:hover .product_card_overlay {
   opacity: 1;
   pointer-events: auto;
+}
+
+.stock {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.out_of_stock {
+  color: #d9534f;
+}
+
+.low_stock, .only_one {
+  color: #f0ad4e;
+}
+
+.product_card_overlay button:disabled {
+  display: none;
+}
+
+.product_card_price_stock {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
 }
 </style>

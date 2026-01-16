@@ -1,5 +1,5 @@
 <template>
-  <div class="product_detail">
+  <div class="product_detail" v-if="product">
     <div class="product_detail_image">
       <img :src="`/${product.image_url}`" :alt="product.name" />
     </div>
@@ -13,9 +13,20 @@
           <p>100g pack = </p>
           <strong class="product_detail_price">{{ product.price }}€</strong>
         </div>
-        <button @click="cart.addToCart(product)">Add to Cart</button>
+        <div class="stock_info">
+          <span v-if="product.stock === 0" class="stock out_of_stock">Out of stock</span>
+          <span v-else-if="product.stock === 1" class="stock only_one">Only 1 left</span>
+          <span v-else-if="product.stock < 4" class="stock low_stock">Low in stock</span>
+          <div class="qty_btn">
+            <QuantitySelector  v-model="quantity" :min="1" :max="maxAvailable" />
+            <button :disabled="product.stock === 0 || quantity > maxAvailable" @click="addToCart(product)">Add to Cart</button>
+          </div>
+        </div>
       </div>
     </div>
+  </div>
+  <div v-else class="empty_state">
+    Unable to load product.
   </div>
   <hr />
   <div class="product_description" v-html="formattedDescription"></div>
@@ -37,11 +48,14 @@
 import { useCartStore } from '@/stores/cart'
 import { marked } from 'marked'
 import ProductCard from '@/components/ProductCard.vue';
+import { useUiStore } from '@/stores/ui'
+import QuantitySelector from '@/components/QuantitySelector.vue';
 
 export default {
   name: 'ProductDetailView',
   components: {
     ProductCard,
+    QuantitySelector
   },
   props: {
     productSlug: {
@@ -53,23 +67,29 @@ export default {
     return {
       product: null,
       relatedProducts: [],
+      quantity: 1,
     };
   },
   computed: {
     formattedDescription() {
-      return this.product
-        ? marked.parse(this.product.description)
-        : ''
+      return this.product ? marked.parse(this.product.description) : ''
+    },
+    maxAvailable() {
+      const itemInCart = this.cart.items.find(i => i.slug === this.product.slug)
+      const inCartQty = itemInCart ? itemInCart.quantity : 0
+      return this.product ? this.product.stock - inCartQty : 0
     }
   },
   created() {
     this.cart = useCartStore()
+    this.ui = useUiStore()
     this.fetchProduct()
   },
   methods: {
     async fetchProduct() {
       try {
         const res = await fetch('/api/products')
+        if (!res.ok) throw new Error('Failed to fetch product')
         const products = await res.json()
         this.product = products.find(p => p.slug === this.productSlug) || null
 
@@ -87,7 +107,14 @@ export default {
         console.error('Error fetching product:', err)
         this.product = null
         this.relatedProducts = []
+        this.ui.show('Unable to load product. Please try again later.', 'error')
       }
+    },
+    addToCart(product) {
+      if (this.quantity > this.maxAvailable || this.maxAvailable <= 0) return
+      this.cart.addToCart(product, this.quantity)
+      this.ui.show('Product added to cart', 'success')
+      this.quantity = 1
     }
   },
 };
@@ -157,7 +184,6 @@ export default {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 1rem;
 }
 
 .product_description {
@@ -209,5 +235,37 @@ export default {
   gap: 1rem;
   margin-top: 2rem;
   max-width: 1300px;
+}
+
+.empty_state {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #555;
+  margin: 3rem 0;
+}
+
+.stock_info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stock_info button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.stock {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.out_of_stock {
+  color: #d9534f;
+}
+
+.low_stock, .only_one {
+  color: #f0ad4e;
 }
 </style>

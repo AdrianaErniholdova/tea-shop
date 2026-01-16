@@ -21,8 +21,7 @@
             v-for="item in cartItems"
             :key="item.slug"
             :item="item"
-            @increment="increment(item.slug)"
-            @decrement="decrement(item.slug)"
+            @updateQuantity="updateQuantity"
             @remove="remove(item.slug)"
           />
         </template>
@@ -72,12 +71,9 @@ export default {
     }
   },
   methods: {
-    increment(slug) {
-      this.cartStore.incrementQuantity(slug);
-    },
-    decrement(slug) {
-      this.cartStore.decrementQuantity(slug);
-    },
+    updateQuantity({ slug, quantity }) {
+    this.cartStore.setQuantity(slug, quantity);
+  },
     remove(slug) {
       this.cartStore.removeFromCart(slug);
     }
