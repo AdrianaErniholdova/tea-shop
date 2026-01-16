@@ -35,6 +35,7 @@
 <script>
 import { useCartStore } from '@/stores/cart'
 import { useUiStore } from '@/stores/ui'
+import { useOrderStore } from '@/stores/order'
 
 export default {
   name: 'CheckoutView',
@@ -52,8 +53,14 @@ export default {
       return useCartStore()
     }
   },
+  mounted() {
+    if (!this.cartStore.items.length) {
+      this.$router.replace('/cart') 
+    }
+  },
   methods: {
     async submitOrder() {
+      const orderStore = useOrderStore();
       if (!this.cartStore.items.length) {
         return
       }
@@ -82,8 +89,10 @@ export default {
 
         const data = await res.json()
 
+        orderStore.completeOrder();
+
         this.cartStore.clearCart()
-        this.$router.push('/')
+        this.$router.push('/thank-you')
 
       } catch (err) {
         console.error(err)
