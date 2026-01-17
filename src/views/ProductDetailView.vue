@@ -28,7 +28,9 @@
           <QuantitySelector  v-model="quantity" :min="1" :max="maxAvailable" />
         </div>
         <div class="btn_icon">
-          <button :disabled="product.stock === 0 || quantity > maxAvailable" @click="addToCart(product)">Add to Cart</button>
+          <BaseButton variant="primary" :disabled="product.stock === 0 || quantity > maxAvailable" @click="addToCart(product)">
+            Add to Cart
+          </BaseButton>
           <div class="wishlist_wrapper">
             <WishlistIcon :product="product" />
           </div>
@@ -60,13 +62,15 @@ import { useUiStore } from '@/stores/ui'
 import QuantitySelector from '@/components/QuantitySelector.vue';
 import WishlistIcon from '@/components/WishlistIcon.vue';
 import { useProductsStore } from '@/stores/products';
+import BaseButton from '@/components/Button.vue'
 
 export default {
   name: 'ProductDetailView',
   components: {
     ProductCard,
     QuantitySelector,
-    WishlistIcon
+    WishlistIcon,
+    BaseButton
   },
   props: {
     productSlug: {
@@ -138,7 +142,7 @@ export default {
   display: flex;
   gap: 5rem;
   max-width: 1300px;
-  margin: 200px auto 100px auto;
+  margin: 150px auto 100px auto;
   align-items: center;
   justify-content: center;
 }
@@ -171,20 +175,6 @@ export default {
   font-size: 1.5rem;
 }
 
-.product_detail button {
-  padding: 0.8rem 1.5rem;
-  font-size: 1rem;
-  background-color: #333;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  width: fit-content;
-}
-
-.product_detail button:hover {
-  background-color: #555;
-}
-
 .product_detail_subheader {
   display: flex;
   flex-direction: column;
@@ -200,12 +190,12 @@ export default {
 }
 
 .product_description {
-  max-width: 1400px;
+  max-width: 1000px;
   margin: 50px auto 4rem;
   padding: 0 2rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 }
 
@@ -285,12 +275,14 @@ export default {
 .btn_icon {
   display: flex;
   flex-direction: row;
-  align-items: center;
   gap: 1rem;
-
 }
 
-.btn_icon button {
-  width: 15rem;
+.wishlist_wrapper {
+  margin-top: 1rem;
+}
+
+.pricing p {
+  margin: 0;
 }
 </style>

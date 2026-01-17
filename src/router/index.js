@@ -1,10 +1,6 @@
-import AboutView from '@/views/AboutView.vue'
-import HomeView from '@/views/HomeView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
+import HomeView from '@/views/HomeView.vue'
 import ProductsView from '@/views/ProductsView.vue'
-import CheckoutView from '@/views/CheckoutView.vue'
-import NotFoundView from '@/views/NotFoundView.vue'
-import ThankYouView from '@/views/ThankYouView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,7 +13,7 @@ const router = createRouter({
     {
       path: '/about',
       name: 'about',
-      component: AboutView
+      component: () => import('@/views/AboutView.vue')
     },
     {
       path: '/products',
@@ -38,17 +34,17 @@ const router = createRouter({
     {
       path: '/checkout',
       name: 'checkout',
-      component: CheckoutView
+      component: () => import('@/views/CheckoutView.vue')
     },
     {
       path: '/thank-you',
       name: 'thank-you',
-      component: ThankYouView
+      component: () => import('@/views/ThankYouView.vue')
     },
     {
       path: '/:pathMatch(.*)*',
       name: 'NotFound',
-      component: NotFoundView
+      component: () => import('@/views/NotFoundView.vue')
     },
     {
       path: '/wishlist',

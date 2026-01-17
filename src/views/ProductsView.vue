@@ -7,7 +7,7 @@
         <p><strong>Tea Type</strong></p>
         <div v-for="type in productsStore.uniqueTypes" :key="type">
           <label>
-            <input type="checkbox" :value="type" v-model="filter.type" />
+            <input type="checkbox" :value="type" v-model="filter.type" id="type"/>
             {{ type }}
           </label>
         </div>
@@ -17,7 +17,7 @@
         <p><strong>Caffeine Level</strong></p>
         <div v-for="level in productsStore.uniqueCaffeineLevels" :key="level">
           <label>
-            <input type="checkbox" :value="level" v-model="filter.caffeine" />
+            <input type="checkbox" :value="level" v-model="filter.caffeine" id="level"/>
             {{ level }}
           </label>
         </div>
@@ -27,13 +27,15 @@
         <p><strong>Origin</strong></p>
         <div v-for="origin in productsStore.uniqueOrigins" :key="origin">
           <label>
-            <input type="checkbox" :value="origin" v-model="filter.origin" />
+            <input type="checkbox" :value="origin" v-model="filter.origin" id="origin"/>
             {{ origin }}
           </label>
         </div>
       </div>
 
-      <button @click="clearFilters" class="clear_filters">Clear Filters</button>
+      <BaseButton @click="clearFilters" variant="primary" class="clear_filters">
+        Clear Filters
+      </BaseButton>
     </aside>
 
     <section class="products_section">
@@ -79,11 +81,13 @@ import ProductCard from '@/components/ProductCard.vue'
 import { useCartStore } from '@/stores/cart'
 import { useFilterStore } from '@/stores/filter'
 import { useProductsStore } from '@/stores/products'
+import BaseButton from '@/components/Button.vue'
 
 export default {
   name: 'ProductsView',
   components: {
     ProductCard,
+    BaseButton
   },
   data() {
     return {
@@ -184,22 +188,13 @@ export default {
 .filter_sidebar {
   flex: 1;
   max-width: 300px;
-  background: #f3f5f3;
+  background: #ffffff;
   padding: 1rem;
   border-radius: 4px;
 }
 
 .filter_section {
   margin-bottom: 1.5rem;
-}
-
-.clear_filters {
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  background: #4b8f5d;
-  color: #fff;
-  border: none;
-  cursor: pointer;
 }
 
 .products_section {
@@ -217,7 +212,7 @@ export default {
 
 .products_grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 0.5rem;
 }
 

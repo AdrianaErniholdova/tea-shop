@@ -41,7 +41,6 @@ export default {
 .thank-you {
     text-align: center;
     margin: 100px 0px 500px 0px;
-    background-color: antiquewhite;
     max-width: 1300px;
     margin-left: auto;
     margin-right: auto;

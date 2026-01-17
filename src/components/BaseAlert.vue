@@ -11,9 +11,10 @@ import { useUiStore } from '@/stores/ui'
 
 export default {
   name: 'BaseAlert',
-  setup() {
-    const ui = useUiStore()
-    return { ui }
+  data() {
+    return {
+      ui: useUiStore()
+    }
   }
 }
 </script>

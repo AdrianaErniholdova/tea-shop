@@ -2,11 +2,11 @@
   <div class="search-bar">
     <input
       type="text"
+      id="search"
       v-model="searchQuery"
       placeholder="Search products..."
       @keyup.enter="searchProducts"
     />
-    <Button @click="searchProducts">Search</Button>
   </div>
 </template>
 
@@ -49,13 +49,13 @@ export default {
   flex: 1;
   max-width: 150px;
   border: none;
+  color: white !important;
+  font-size: 14px;
+  background-color: transparent;
 }
 
-.search-bar button {
-  padding: 5px 10px;
-  background: #4c664e;
+.search-bar input::placeholder {
   color: white;
-  border: none;
-  cursor: pointer;
+  opacity: 1;
 }
 </style>

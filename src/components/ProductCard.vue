@@ -77,13 +77,13 @@ export default {
 
 <style scoped>
 .product_card {
-  background: #fafbf9;
+  background: #fff;
   transition: all 0.4s ease;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 400px;
+  max-width: 300px;
 }
 
 .product_card:hover {

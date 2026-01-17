@@ -42,7 +42,14 @@
           <span>{{ totalPrice }}€</span>
         </div>
 
-        <button class="checkout" :disabled="cartItems.length === 0" @click="$router.push('/checkout')">Checkout</button>
+        <BaseButton
+          class="checkout"
+          :disabled="cartItems.length === 0"
+          @click="$router.push('/checkout')"
+          variant="primary"
+        >
+          Checkout
+        </BaseButton>
       </div>
     </div>
   </div>
@@ -51,11 +58,13 @@
 <script>
 import { useCartStore } from '@/stores/cart'
 import CartItem from '@/components/CartItem.vue';
+import BaseButton from '@/components/Button.vue';
 
 export default {
   name: 'CartView',
   components: {
     CartItem,
+    BaseButton
   },
   data() {
     return {
@@ -113,7 +122,7 @@ export default {
 }
 
 .cart_summary {
-  background: #f3f5f3;
+  background: white;
   padding: 2rem;
   border-radius: 4px;
   height: fit-content;
@@ -129,32 +138,11 @@ export default {
   margin-bottom: 0.8rem;
 }
 
-.free {
-  color: #4b8f5d;
-}
-
-.summary_coupon {
-  background: none;
-  border: none;
-  color: #4b8f5d;
-  margin: 1rem 0;
-  cursor: pointer;
-}
-
 .summary_total {
   display: flex;
   justify-content: space-between;
   font-weight: 600;
   margin: 1.5rem 0;
-}
-
-.checkout {
-  width: 100%;
-  padding: 1rem;
-  background: #4b8f5d;
-  color: white;
-  border: none;
-  cursor: pointer;
 }
 
 .cart_empty {
@@ -166,7 +154,7 @@ export default {
 .shop_link {
   display: inline-block;
   margin-top: 1rem;
-  color: #4b8f5d;
+  color: #405d1c;
   font-weight: 600;
   text-decoration: none;
 }
@@ -175,5 +163,9 @@ export default {
   background: #b5b5b5;
   cursor: not-allowed;
   opacity: 0.7;
+}
+
+.checkout {
+  width: 100%;
 }
 </style>

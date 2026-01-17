@@ -64,7 +64,7 @@ export default {
 <style scoped>
 .cart_item {
   display: grid;
-  grid-template-columns: 80px 1fr 80px 120px 80px 20px;
+  grid-template-columns: 80px 1fr 70px 140px 70px 20px;
   align-items: center;
   gap: 1rem;
   padding: 1.5rem 0;

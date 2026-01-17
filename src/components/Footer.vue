@@ -8,21 +8,29 @@
           Premium teas sourced from traditional tea regions.
         </p>
         <div class="socials">
-          <svg-icon type="mdi" :path="path"></svg-icon>
-          <svg-icon type="mdi" :path="pathTwitter"></svg-icon>
-          <svg-icon type="mdi" :path="pathYoutube"></svg-icon>
+          <a href="https://www.facebook.com" target="_blank">
+            <svg-icon type="mdi" :path="path"></svg-icon>
+          </a>
+          <a href="https://x.com/" target="_blank">
+            <svg-icon type="mdi" :path="pathTwitter"></svg-icon>
+          </a>
+          <a href="https://www.youtube.com/" target="_blank">
+            <svg-icon type="mdi" :path="pathYoutube"></svg-icon>
+          </a>
         </div>
       </div>
 
       <div class="footer_section">
         <h4>Links</h4>
         <router-link to="/about">About Us</router-link>
+        <router-link to="/products">Products</router-link>
+        <router-link to="/wishlist">Wishlist</router-link>
       </div>
 
       <div class="footer_section">
         <h4>Contact</h4>
-        <p>Email: info@teashop.com</p>
-        <p>Phone: +421 900 000 000</p>
+        <a href="mailto:example@example.com">Email: info@teashop.com</a>
+        <a href="tel:+421 900 000 000">Phone: +421 900 000 000</a>
       </div>
 
     </div>
@@ -55,10 +63,10 @@ export default {
 
 <style scoped>
 .footer {
-  background-color: rgba(244, 246, 243, 0.9);
+  background-color: #405d1c;
   backdrop-filter: blur(10px);
   border-top: 1px solid #d7ddd6;
-  color: #323232;
+  color: white;
   padding: 3rem 1.5rem 1.5rem;
 }
 
@@ -71,18 +79,21 @@ export default {
 }
 
 .footer_section {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .footer_section h3,
 .footer_section h4 {
   margin-bottom: 1rem;
   font-size: 1.1rem;
+  color: white;
 }
 
 .footer_section p,
 .footer_section a {
-  color: #3a3a3a;
+  color: white;
   font-size: 0.9rem;
   line-height: 1.6;
   text-decoration: none;
@@ -90,7 +101,7 @@ export default {
 }
 
 .footer_section a:hover {
-  color: #405d1c;
+  color: #f8f7f3;
 }
 
 .socials {
@@ -112,7 +123,7 @@ export default {
   text-align: center;
   margin-top: 1rem;
   font-size: 0.8rem;
-  color: #777;
+  color: #f8f7f3;
 }
 
 @media (max-width: 768px) {

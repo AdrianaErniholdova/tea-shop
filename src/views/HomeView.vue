@@ -7,7 +7,9 @@
       <div class="hero_content">
         <h1 class="hero_title">Welcome to the Tea Shop</h1>
         <p class="hero_subtitle">Discover our finest selection of teas from around the world.</p>
-        <RouterLink to="/products" class="hero_shop_btn">Shop Now</RouterLink>
+        <BaseButton tag="RouterLink" :to="'/products'" variant="primary">
+          Shop Now
+        </BaseButton>
       </div>
     </div> 
   </div>
@@ -26,11 +28,13 @@
 import ProductCard from '@/components/ProductCard.vue';
 import { useCartStore } from '@/stores/cart'
 import { useProductsStore } from '@/stores/products';
+import BaseButton from '@/components/Button.vue';
 
 export default {
   name: 'HomeView',
   components: {
     ProductCard,
+    BaseButton
   },
   data() {
     return {
@@ -109,24 +113,6 @@ export default {
   margin-bottom: 2rem;
   line-height: 1.6;
   color: #29332c;
-}
-
-.hero_shop_btn {
-  display: inline-block;
-  background: #405d1c;
-  color: white;
-  padding: 0.9rem 2rem;
-  border-radius: 12px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(138, 157, 133, 0.25);
-}
-
-.hero_shop_btn:hover {
-  background: #6d7e0e;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(138, 157, 133, 0.35);
 }
 
 @media (max-width: 1400px) {

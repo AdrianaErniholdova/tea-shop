@@ -82,7 +82,7 @@ export default {
   position: fixed;
   top: 0;
   width: 100%;
-  background: rgba(244, 246, 243, 0.9);
+  background: #405d1c;
   backdrop-filter: blur(10px);
   border-bottom: 1px solid #d7ddd6;
   z-index: 1000;
@@ -102,7 +102,7 @@ export default {
   align-items: center;
   gap: 0.5rem;
   text-decoration: none;
-  color: #1f3d2b;
+  color: #ffffff;
   font-weight: 700;
   font-size: 1.2rem;
 }
@@ -115,16 +115,16 @@ export default {
 .nav_link {
   position: relative;
   text-decoration: none;
-  color: #3b4a40;
+  color: #ffffff;
   font-weight: 500;
 }
 
 .nav_link:hover {
-  color: #1f3d2b;
+  color: #ffffff;
 }
 
 .nav_link.router-link-active {
-  color: #1f3d2b;
+  color: #ffffff;
 }
 
 .nav_link.router-link-active::after {
@@ -134,7 +134,7 @@ export default {
   left: 50%;
   width: 60%;
   height: 2px;
-  background: #1f3d2b;
+  background: #ffffff;
   transform: translateX(-50%);
   border-radius: 2px;
 }
@@ -143,9 +143,9 @@ export default {
   justify-self: end;
   text-decoration: none;
   padding: 0.4rem 0.5rem 0.2rem 0.5rem;
-  border-radius: 20px;
-  border: 1px solid #7c9c89;
-  color: #1f3d2b;
+  border-radius: 30px;
+  border: 2px solid #ffffff;
+  color: #ffffff;
   transition: background 0.3s;
 }
 
@@ -155,7 +155,7 @@ export default {
 }
 
 .nav_cart:hover {
-  background: #e2ebe4;
+  background: #e2ebe448;
 }
 
 .nav_hamburger {
@@ -224,7 +224,7 @@ export default {
   width: 1.4em;
   height: 1.4em;
   cursor: pointer;
-  color: #3b4a40;
+  color: #ffffff;
   transition: transform 0.15s ease, color 0.15s ease;
 }
 </style>

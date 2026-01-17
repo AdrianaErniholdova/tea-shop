@@ -10,52 +10,12 @@
 /* ==================== CSS VARIABLES ==================== */
 :root {
   /* Colors */
-  --color-primary: #8a9d85;
-  --color-primary-dark: #7a8d75;
-  --color-primary-light: #9aab95;
-  
   --color-text: #2d3a2e;
-  --color-text-light: #6b7569;
-  --color-text-muted: #8a9088;
-  
-  --color-bg: #e1e1e1;         /* #f5f7f4;*/
-  --color-bg-alt: #f5f7f3;
-  --color-bg-light: #ffffff;
-  
-  --color-border: #e0e5dd;
-  --color-border-light: rgba(200, 210, 195, 0.2);
-  
-  --color-accent: #c9d6c3;
-  --color-accent-light: rgba(138, 157, 133, 0.1);
+  --color-bg: #f8f7f3;
   
   /* Fonts */
   --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   --font-serif: 'Georgia', serif;
-  
-  /* Spacing */
-  --spacing-xs: 0.5rem;
-  --spacing-sm: 1rem;
-  --spacing-md: 1.5rem;
-  --spacing-lg: 2rem;
-  --spacing-xl: 3rem;
-  --spacing-2xl: 4rem;
-  
-  /* Border Radius */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
-  --radius-full: 50px;
-  
-  /* Shadows */
-  --shadow-sm: 0 2px 8px rgba(138, 157, 133, 0.1);
-  --shadow-md: 0 4px 12px rgba(138, 157, 133, 0.15);
-  --shadow-lg: 0 8px 24px rgba(138, 157, 133, 0.2);
-  
-  /* Transitions */
-  --transition-fast: 0.2s ease;
-  --transition-base: 0.3s ease;
-  --transition-slow: 0.5s ease;
 }
 
 /* ==================== BASE STYLES ==================== */
@@ -114,51 +74,11 @@ a:hover {
   color: var(--color-primary-dark);
 }
 
-/* ==================== UTILITY CLASSES ==================== */
-
-.text-center {
-  text-align: center;
-}
-
-.text-muted {
-  color: var(--color-text-muted);
-}
-
-.mt-1 { margin-top: var(--spacing-sm); }
-.mt-2 { margin-top: var(--spacing-md); }
-.mt-3 { margin-top: var(--spacing-lg); }
-.mt-4 { margin-top: var(--spacing-xl); }
-
-.mb-1 { margin-bottom: var(--spacing-sm); }
-.mb-2 { margin-bottom: var(--spacing-md); }
-.mb-3 { margin-bottom: var(--spacing-lg); }
-.mb-4 { margin-bottom: var(--spacing-xl); }
-
-.section {
-  padding: var(--spacing-2xl) 0;
-}
-
-.section--lg {
-  padding: 5rem 0;
-}
-
-/* ==================== BUTTONS (base styles) ==================== */
-button {
-  font-family: inherit;
-  cursor: pointer;
-  border: none;
-}
-
 /* ==================== IMAGES ==================== */
 img {
   max-width: 100%;
   height: auto;
   display: block;
-}
-
-/* ==================== LISTS ==================== */
-ul, ol {
-  list-style: none;
 }
 
 /* ==================== RESPONSIVE ==================== */

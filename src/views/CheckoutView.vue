@@ -6,12 +6,12 @@
       <form @submit.prevent="submitOrder" class="checkout_form">
         <label>
           Name
-          <input type="text" v-model="form.name" required />
+          <input type="text" v-model="form.name" id="name" name="name" required />
         </label>
 
         <label>
           Email
-          <input type="email" v-model="form.email" required />
+          <input type="email" v-model="form.email" id="email" name="email" required />
         </label>
 
         <h3>Order Summary</h3>
@@ -26,7 +26,7 @@
           <strong>Total: {{ cartStore.totalPrice }}€</strong>
         </div>
 
-        <button type="submit">Place Order</button>
+        <BaseButton variant="primary" type="submit"> Place Order </BaseButton>
       </form>
     </div>
   </div>
@@ -34,11 +34,12 @@
 
 <script>
 import { useCartStore } from '@/stores/cart'
-import { useUiStore } from '@/stores/ui'
 import { useOrderStore } from '@/stores/order'
+import BaseButton from '@/components/Button.vue'
 
 export default {
   name: 'CheckoutView',
+  components: { BaseButton },
   data() {
     return {
       form: {
@@ -81,7 +82,7 @@ export default {
 }
 
 .checkout_container {
-  background: #f3f5f3;
+  background: #ffffff;
   padding: 2rem;
   border-radius: 6px;
 }
@@ -102,6 +103,7 @@ export default {
   padding: 0.5rem;
   font-size: 1rem;
   border-radius: 4px;
+  background-color: #f8f7f3;
   border: 1px solid #ccc;
 }
 
@@ -117,22 +119,8 @@ export default {
 
 .checkout_total {
   margin-top: 1rem;
+  margin-bottom: 1rem;
   font-size: 1.2rem;
   font-weight: 600;
-}
-
-button[type="submit"] {
-  margin-top: 1.5rem;
-  padding: 0.8rem 1.5rem;
-  font-size: 1rem;
-  background: #4b8f5d;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 4px;
-}
-
-button[type="submit"]:hover {
-  background: #3d7a4a;
 }
 </style>

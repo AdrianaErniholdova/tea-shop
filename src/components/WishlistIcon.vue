@@ -47,7 +47,7 @@ export default {
 
 <style scoped>
 .wishlist-icon {
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   width: 1em;
   height: 1em;
   cursor: pointer;

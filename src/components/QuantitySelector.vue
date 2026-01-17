@@ -61,7 +61,7 @@ export default {
   height: 32px;
   border-radius: 50%;
   border: none;
-  background-color: #2d3a2e;
+  background-color: #405d1c;
   color: #ffffff;
   font-size: 1.2rem;
   font-weight: 500;
@@ -73,7 +73,7 @@ export default {
 }
 
 .qty_btn:hover:not(:disabled) {
-  background-color: #3f5241;
+  background-color: #6d7e0e;
   transform: scale(1.05);
 }
 
