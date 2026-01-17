@@ -58,7 +58,8 @@ export const useProductsStore = defineStore('products', {
 
           this.products = await res.json()
         } else {
-          const res = await fetch('/data/products.json')
+          const base = import.meta.env.BASE_URL
+          const res = await fetch(`${base}data/products.json`)
 
           if (!res.ok) throw new Error('Failed to load products')
             

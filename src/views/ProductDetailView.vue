@@ -1,7 +1,13 @@
 <template>
-  <div class="product_detail" v-if="product">
+  <div v-if="productsStore.loading" class="empty_state">
+    Loading product...
+  </div>
+  <div v-else-if="!product" class="empty_state">
+    Unable to load product.
+  </div>
+  <div v-else class="product_detail">
     <div class="product_detail_image">
-      <img :src="`/${product.image_url}`" :alt="product.name" />
+      <img :src="productImage" :alt="product.name" />
     </div>
     <div class="product_detail_info">
       <div class="product_detail_header">
@@ -29,9 +35,6 @@
         </div>
       </div>
     </div>
-  </div>
-  <div v-else class="empty_state">
-    Unable to load product.
   </div>
   <hr />
   <div class="product_description" v-html="formattedDescription"></div>
@@ -82,6 +85,10 @@ export default {
   computed: {
     product() {
       return this.productsStore?.getProductBySlug(this.productSlug) || null
+    },
+    productImage() {
+      if (!this.product) return ''
+      return import.meta.env.BASE_URL + 'images/' + this.product.image_url
     },
 
     formattedDescription() {

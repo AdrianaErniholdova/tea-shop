@@ -4,7 +4,7 @@
       <div class="wishlist_wrapper">
         <WishlistIcon :product="product" />
       </div>
-      <img :src="`/${product.image_url}`" :alt="product.name" class="product_card_image"/>
+      <img :src="productImage" :alt="product.name" class="product_card_image"/>
       <div class="product_card_overlay">
         <Button variant="primary" @click.stop="addToCart" :disabled="product.stock === 0 || cartQuantity >= product.stock">
           Add to cart
@@ -48,7 +48,11 @@ export default {
       const cart = useCartStore()
       const item = cart.items.find(i => i.slug === this.product.slug)
       return item ? item.quantity : 0
-    }
+    },
+    productImage() {
+      if (!this.product) return ''
+      return import.meta.env.BASE_URL + 'images/' + this.product.image_url
+    },
   },
   methods: {
     goToDetail() {

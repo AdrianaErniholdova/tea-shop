@@ -1,6 +1,6 @@
 <template>
   <div class="cart_item">
-    <img :src="`/${item.image_url}`" :alt="item.name" class="cart_item_image" />
+    <img :src="`images/${item.image_url}`" :alt="item.name" class="cart_item_image" />
     <div class="cart_item_info">
       <div class="cart_item_name">{{ item.name }}</div>
     </div>
