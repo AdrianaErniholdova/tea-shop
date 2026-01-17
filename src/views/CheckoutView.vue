@@ -18,7 +18,7 @@
         <div class="checkout_items">
           <div v-for="item in cartStore.items" :key="item.slug" class="checkout_item">
             <span>{{ item.name }}</span>
-            <span>{{ item.quantity }} × {{ item.price }}€ = {{ item.quantity * item.price }}€</span>
+            <span>{{ item.quantity }} × {{ item.price }} € = {{ item.quantity * item.price }}€</span>
           </div>
         </div>
 
@@ -45,13 +45,13 @@ export default {
         name: '',
         email: ''
       },
-      loading: false
+      cartStore: null,
+      orderStore: null,
     }
   },
-  computed: {
-    cartStore() {
-      return useCartStore()
-    }
+  created() {
+    this.cartStore = useCartStore()
+    this.orderStore = useOrderStore()
   },
   mounted() {
     if (!this.cartStore.items.length) {
@@ -60,48 +60,13 @@ export default {
   },
   methods: {
     async submitOrder() {
-      const orderStore = useOrderStore();
-      if (!this.cartStore.items.length) {
-        return
-      }
+      const result = await this.orderStore.createOrder(
+        this.form.name,
+        this.form.email
+      )
 
-      this.loading = true
-
-      const payload = {
-        customerName: this.form.name,
-        customerEmail: this.form.email,
-        items: this.cartStore.items.map(item => ({
-          teaId: item.id,
-          quantity: item.quantity,
-          price: item.price
-        })),
-        total: this.cartStore.totalPrice
-      }
-
-      try {
-        const res = await fetch('/api/orders', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        })
-
-        if (!res.ok) throw new Error('Failed to create order')
-
-        const data = await res.json()
-
-        orderStore.completeOrder();
-
-        this.cartStore.clearCart()
+      if (result.success) {
         this.$router.push('/thank-you')
-
-      } catch (err) {
-        console.error(err)
-      
-        const ui = useUiStore()
-        ui.show('Failed to place order. Please try again.', 'error')
-        
-      } finally {
-        this.loading = false
       }
     }
   }

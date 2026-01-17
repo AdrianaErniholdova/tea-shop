@@ -16,7 +16,7 @@
     <h2 class="tea_picks__title">Our Best Selling Teas</h2>
 
     <div class="tea_grid">
-      <div v-if="error" class="empty_state">{{ error }}</div>
+      <div v-if="productsStore.error" class="empty_state">{{ productsStore.error }}</div>
       <ProductCard v-for="product in bestSellingTeas" :key="product.slug" :product="product" @add-to-cart="addToCart" />
     </div>
   </section>
@@ -25,7 +25,7 @@
 <script>
 import ProductCard from '@/components/ProductCard.vue';
 import { useCartStore } from '@/stores/cart'
-import { useUiStore } from '@/stores/ui'
+import { useProductsStore } from '@/stores/products';
 
 export default {
   name: 'HomeView',
@@ -36,12 +36,12 @@ export default {
     return {
       products: [],
       cart: null,
-      error: null,
+      productsStore: null,
     };
   },
   computed: {
     bestSellingTeas() {
-      return this.products
+      return this.productsStore.products
         .slice()
         .sort((a, b) => b.totalSold - a.totalSold)
         .slice(0, 5)
@@ -49,22 +49,11 @@ export default {
   },
   async created() {
     this.cart = useCartStore()
-    await this.fetchProducts()
+    this.productsStore = useProductsStore()
+
+    await this.productsStore.fetchProducts()
   },
   methods: {
-    async fetchProducts() {
-      try {
-        const res = await fetch('/api/products')
-        if (!res.ok) throw new Error('Failed to fetch products')
-        const data = await res.json()
-        this.products = data
-      } catch (err) {
-        console.error('Failed to fetch products:', err)
-        this.error = 'Unable to load products. Please try again later.'
-        const ui = useUiStore()
-        ui.show(this.error, 'error')
-      }
-    },
     addToCart(product) {
       this.cart.addToCart(product)
     },

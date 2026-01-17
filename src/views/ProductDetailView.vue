@@ -56,6 +56,7 @@ import ProductCard from '@/components/ProductCard.vue';
 import { useUiStore } from '@/stores/ui'
 import QuantitySelector from '@/components/QuantitySelector.vue';
 import WishlistIcon from '@/components/WishlistIcon.vue';
+import { useProductsStore } from '@/stores/products';
 
 export default {
   name: 'ProductDetailView',
@@ -72,12 +73,17 @@ export default {
   },
   data() {
     return {
-      product: null,
-      relatedProducts: [],
+      cart: null,
+      ui: null,
+      productsStore: null,
       quantity: 1,
     };
   },
   computed: {
+    product() {
+      return this.productsStore?.getProductBySlug(this.productSlug) || null
+    },
+
     formattedDescription() {
       return this.product ? marked.parse(this.product.description) : ''
     },
@@ -85,38 +91,31 @@ export default {
       const itemInCart = this.cart.items.find(i => i.slug === this.product.slug)
       const inCartQty = itemInCart ? itemInCart.quantity : 0
       return this.product ? this.product.stock - inCartQty : 0
+    },
+
+    relatedProducts() {
+      if (!this.product) return []
+      
+      return this.productsStore.products.filter(p =>
+        p.slug !== this.product.slug &&
+        p.typeSlug === this.product.typeSlug &&
+        p.caffeineLevel === this.product.caffeineLevel
+      ).slice(0, 4)
     }
   },
-  created() {
+
+  async created() {
     this.cart = useCartStore()
     this.ui = useUiStore()
-    this.fetchProduct()
+    this.productsStore = useProductsStore()
+
+    await this.productsStore.fetchProducts()
+
+    if (!this.product && !this.productsStore.loading) {
+      this.ui.show('Product not found', 'error')
+    }
   },
   methods: {
-    async fetchProduct() {
-      try {
-        const res = await fetch('/api/products')
-        if (!res.ok) throw new Error('Failed to fetch product')
-        const products = await res.json()
-        this.product = products.find(p => p.slug === this.productSlug) || null
-
-        if (this.product) {
-          this.relatedProducts = products.filter(p =>
-            p.slug !== this.product.slug &&
-            p.typeSlug === this.product.typeSlug &&
-            p.caffeineLevel === this.product.caffeineLevel
-          )
-          .slice(0, 4)
-        } else {
-          this.relatedProducts = []
-        }
-      } catch (err) {
-        console.error('Error fetching product:', err)
-        this.product = null
-        this.relatedProducts = []
-        this.ui.show('Unable to load product. Please try again later.', 'error')
-      }
-    },
     addToCart(product) {
       if (this.quantity > this.maxAvailable || this.maxAvailable <= 0) return
       this.cart.addToCart(product, this.quantity)

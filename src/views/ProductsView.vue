@@ -5,7 +5,7 @@
       <h3>Filter</h3>
       <div class="filter_section">
         <p><strong>Tea Type</strong></p>
-        <div v-for="type in uniqueTypes" :key="type">
+        <div v-for="type in productsStore.uniqueTypes" :key="type">
           <label>
             <input type="checkbox" :value="type" v-model="filter.type" />
             {{ type }}
@@ -15,7 +15,7 @@
 
       <div class="filter_section">
         <p><strong>Caffeine Level</strong></p>
-        <div v-for="level in uniqueCaffeineLevels" :key="level">
+        <div v-for="level in productsStore.uniqueCaffeineLevels" :key="level">
           <label>
             <input type="checkbox" :value="level" v-model="filter.caffeine" />
             {{ level }}
@@ -25,7 +25,7 @@
 
       <div class="filter_section">
         <p><strong>Origin</strong></p>
-        <div v-for="origin in uniqueOrigins" :key="origin">
+        <div v-for="origin in productsStore.uniqueOrigins" :key="origin">
           <label>
             <input type="checkbox" :value="origin" v-model="filter.origin" />
             {{ origin }}
@@ -53,13 +53,13 @@
 
       <div class="products_grid">
 
-        <div v-if="loading" class="empty_state">
+        <div v-if="productsStore.loading" class="empty_state">
           Loading products...
         </div>
-        <div v-else-if="error" class="empty_state">
-          {{ error }}
+        <div v-else-if="productsStore.error" class="empty_state">
+          {{ productsStore.error }}
         </div>
-        <div v-else-if="!error && filteredProducts.length === 0" class="empty_state">
+        <div v-else-if="!productsStore.error && filteredProducts.length === 0" class="empty_state">
           No products match your selection.
         </div>
         
@@ -78,7 +78,7 @@
 import ProductCard from '@/components/ProductCard.vue'
 import { useCartStore } from '@/stores/cart'
 import { useFilterStore } from '@/stores/filter'
-import { useUiStore } from '@/stores/ui'
+import { useProductsStore } from '@/stores/products'
 
 export default {
   name: 'ProductsView',
@@ -87,11 +87,9 @@ export default {
   },
   data() {
     return {
-      products: [],
       cart: null,
       filter: null,
-      loading: false,
-      error: null
+      productsStore: null,
     };
   },
 
@@ -101,7 +99,9 @@ export default {
     this.filter.loadFromSession()
     this.filter.setFromRoute(this.$route.query)
     this.syncRoute()
-    await this.fetchProducts()
+    this.productsStore = useProductsStore()
+
+    await this.productsStore.fetchProducts()
   },
 
   watch: {
@@ -115,18 +115,8 @@ export default {
   },
 
   computed: {
-    uniqueTypes() {
-      return [...new Set(this.products.map(p => p.typeName))].filter(Boolean)
-    },
-    uniqueCaffeineLevels() {
-      return [...new Set(this.products.map(p => p.caffeineLevel))].filter(Boolean)
-    },
-    uniqueOrigins() {
-      return [...new Set(this.products.map(p => p.originName))].filter(Boolean)
-    },
-
     filteredProducts() {
-      return this.products.filter(p => {
+      return this.productsStore.products.filter(p => {
         return (
           (this.filter.type.length === 0 || this.filter.type.includes(p.typeName)) &&
           (this.filter.caffeine.length === 0 || this.filter.caffeine.includes(p.caffeineLevel)) &&
@@ -155,23 +145,6 @@ export default {
   },
 
   methods: {
-    async fetchProducts() {
-      this.loading = true
-      this.error = null
-      try {       
-        const res = await fetch('/api/products')
-        if (!res.ok) throw new Error('Failed to load products')
-        this.products = await res.json()
-      } catch (err) {
-        console.error('Error fetching products:', err)
-        this.error = 'Unable to load products. Please try again later.'
-        const ui = useUiStore()
-        ui.show(this.error, 'error')
-      } finally {
-        this.loading = false
-      }
-    },
-
     addToCart(product) {
       this.cart.addToCart(product)
     },
