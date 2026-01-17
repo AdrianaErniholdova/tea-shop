@@ -37,26 +37,43 @@ export const useOrderStore = defineStore('order', {
       }
 
       try {
-        const res = await fetch('/api/orders', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        })
+        const isDev = import.meta.env.DEV
+        
+        if (isDev) {
+          const res = await fetch('/api/orders', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          })
 
-        if (!res.ok) {
-          throw new Error('Failed to create order')
-        }
+          if (!res.ok) {
+            throw new Error('Failed to create order')
+          }
 
-        const data = await res.json()
-        
-        this.lastOrderId = data.orderId
-        this.completeOrder()
-        
-        cart.clearCart()
-        
-        return { 
-          success: true, 
-          orderId: data.orderId 
+          const data = await res.json()
+          
+          this.lastOrderId = data.orderId
+          this.completeOrder()
+          cart.clearCart()
+          
+          return { 
+            success: true, 
+            orderId: data.orderId 
+          }
+          
+        } else {
+          await new Promise(resolve => setTimeout(resolve, 1000))
+          
+          this.lastOrderId = Math.floor(Math.random() * 10000)
+          this.completeOrder()
+          cart.clearCart()
+          
+          ui.show('Demo mode: Order simulated (not saved to database)', 'info')
+          
+          return { 
+            success: true, 
+            orderId: this.lastOrderId 
+          }
         }
 
       } catch (err) {

@@ -39,6 +39,10 @@ export default {
   background: #c0392b;
 }
 
+.info {
+  background: #dbcd34;
+}
+
 .fade-slide-enter-active,
 .fade-slide-leave-active {
   transition: all 0.3s ease;

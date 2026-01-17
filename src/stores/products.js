@@ -49,13 +49,22 @@ export const useProductsStore = defineStore('products', {
       this.error = null
 
       try {
-        const res = await fetch('/api/products')
+        const isDev = import.meta.env.DEV
         
-        if (!res.ok) {
-          throw new Error('Failed to load products')
-        }
+        if (isDev) {
+          const res = await fetch('/api/products')
 
-        this.products = await res.json()
+          if (!res.ok) throw new Error('Failed to load products')
+
+          this.products = await res.json()
+        } else {
+          const res = await fetch('/data/products.json')
+
+          if (!res.ok) throw new Error('Failed to load products')
+            
+          this.products = await res.json()
+        }
+        
         this.lastFetch = Date.now()
         
       } catch (err) {
