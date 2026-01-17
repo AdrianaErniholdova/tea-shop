@@ -11,15 +11,20 @@
       <div class="product_detail_subheader">
         <div class="pricing">
           <p>100g pack = </p>
-          <strong class="product_detail_price">{{ product.price }}€</strong>
+          <strong class="product_detail_price">{{ product.price }} €</strong>
         </div>
         <div class="stock_info">
           <span v-if="product.stock === 0" class="stock out_of_stock">Out of stock</span>
           <span v-else-if="product.stock === 1" class="stock only_one">Only 1 left</span>
           <span v-else-if="product.stock < 4" class="stock low_stock">Low in stock</span>
-          <div class="qty_btn">
-            <QuantitySelector  v-model="quantity" :min="1" :max="maxAvailable" />
-            <button :disabled="product.stock === 0 || quantity > maxAvailable" @click="addToCart(product)">Add to Cart</button>
+        </div>
+        <div class="qty_btn">
+          <QuantitySelector  v-model="quantity" :min="1" :max="maxAvailable" />
+        </div>
+        <div class="btn_icon">
+          <button :disabled="product.stock === 0 || quantity > maxAvailable" @click="addToCart(product)">Add to Cart</button>
+          <div class="wishlist_wrapper">
+            <WishlistIcon :product="product" />
           </div>
         </div>
       </div>
@@ -50,12 +55,14 @@ import { marked } from 'marked'
 import ProductCard from '@/components/ProductCard.vue';
 import { useUiStore } from '@/stores/ui'
 import QuantitySelector from '@/components/QuantitySelector.vue';
+import WishlistIcon from '@/components/WishlistIcon.vue';
 
 export default {
   name: 'ProductDetailView',
   components: {
     ProductCard,
-    QuantitySelector
+    QuantitySelector,
+    WishlistIcon
   },
   props: {
     productSlug: {
@@ -156,7 +163,6 @@ export default {
 
 .product_detail_price {
   font-size: 1.5rem;
-  margin-bottom: 1rem;
 }
 
 .product_detail button {
@@ -176,8 +182,9 @@ export default {
 .product_detail_subheader {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   margin-bottom: 2rem;
+  gap: 1rem;
 }
 
 .pricing {
@@ -267,5 +274,17 @@ export default {
 
 .low_stock, .only_one {
   color: #f0ad4e;
+}
+
+.btn_icon {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+
+}
+
+.btn_icon button {
+  width: 15rem;
 }
 </style>

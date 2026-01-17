@@ -49,6 +49,11 @@ const router = createRouter({
       path: '/:pathMatch(.*)*',
       name: 'NotFound',
       component: NotFoundView
+    },
+    {
+      path: '/wishlist',
+      name: 'wishlist',
+      component: () => import('@/views/WishlistView.vue')
     }
   ]
 })

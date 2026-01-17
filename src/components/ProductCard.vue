@@ -1,6 +1,9 @@
 <template>
   <div class="product_card" @click="goToDetail">
     <div class="product_card_image_container">
+      <div class="wishlist_wrapper">
+        <WishlistIcon :product="product" />
+      </div>
       <img :src="`/${product.image_url}`" :alt="product.name" class="product_card_image"/>
       <div class="product_card_overlay">
         <Button variant="primary" @click.stop="addToCart" :disabled="product.stock === 0 || cartQuantity >= product.stock">
@@ -25,11 +28,13 @@
 import Button from './Button.vue';
 import { useUiStore } from '@/stores/ui'
 import { useCartStore } from '@/stores/cart'
+import WishlistIcon from './WishlistIcon.vue';
 
 export default {
   name: 'ProductCard',
   components: {
     Button,
+    WishlistIcon
   },
   props: {
     product: {
@@ -78,7 +83,7 @@ export default {
 }
 
 .product_card:hover {
-  /*transform: translateY(-8px);*/
+  transform: translateY(-8px);
   box-shadow: 0 16px 40px rgba(45, 58, 46, 0.12);
 }
 
@@ -176,4 +181,12 @@ export default {
   align-items: center;
   gap: 0.5rem;
 }
+
+.wishlist_wrapper {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  z-index: 3;
+}
+
 </style>

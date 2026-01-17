@@ -15,8 +15,12 @@
 
       <div class="nav_actions">
         <SearchBar />
+        <router-link to="/wishlist" class="wishlist-link">
+          <SvgIcon type="mdi" :path="mdiHeartCircleOutline" class="wishlist-icon" />
+        </router-link>
         <RouterLink to="/cart" class="nav_cart">
-          <svg-icon type="mdi" :path="path"></svg-icon>
+          <SvgIcon type="mdi" :path="mdiCart" class="cart-icon" />
+          <span v-if="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
         </RouterLink>
       </div>
 
@@ -31,8 +35,11 @@
 
 <script>
 import SvgIcon from '@jamescoyle/vue-icon';
-import { mdilCart } from '@mdi/light-js';
+import { mdiCart } from '@mdi/js';
 import SearchBar from './SearchBar.vue';
+import { mdiHeartCircleOutline } from '@mdi/js';
+import { useWishlistStore } from '@/stores/wishlist';
+import { useCartStore } from '@/stores/cart';
 
 export default {
   name: 'TheNavigation',
@@ -44,10 +51,21 @@ export default {
   data() {
     return {
       menuOpen: false,
-      path: mdilCart
+      mdiCart,
+      mdiHeartCircleOutline
     };
   },
-
+  computed: {
+    wishlist() {
+      return useWishlistStore()
+    },
+    cart() {
+      return useCartStore();
+    },
+    cartCount() {
+      return this.cart.items.reduce((sum, item) => sum + item.quantity, 0);
+    }
+  },
   methods: {
     toggleMenu() {
       this.menuOpen = !this.menuOpen;
@@ -199,5 +217,14 @@ export default {
   justify-content: flex-end;
   align-items: center;
   gap: 1rem;
+}
+
+.wishlist-icon {
+  font-size: 1.6rem;
+  width: 1.4em;
+  height: 1.4em;
+  cursor: pointer;
+  color: #3b4a40;
+  transition: transform 0.15s ease, color 0.15s ease;
 }
 </style>

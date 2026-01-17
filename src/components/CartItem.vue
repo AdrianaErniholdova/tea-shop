@@ -17,19 +17,25 @@
 
     <div class="cart_item_total">{{ (item.price * localQuantity).toFixed(2) }} €</div>
 
-    <div class="cart_item_remove">
-      <button @click="$emit('remove')">✕</button>
-    </div>
+    <SvgIcon
+        type="mdi"
+        :path="mdiCloseCircleOutline"
+        class="cart_remove_icon"
+        @click="$emit('remove')"
+      />
   </div>
 </template>
 
 <script>
 import QuantitySelector from './QuantitySelector.vue'
+import SvgIcon from '@jamescoyle/vue-icon'
+import { mdiCloseCircleOutline } from '@mdi/js'
 
 export default {
   name: 'CartItem',
   components: {
     QuantitySelector,
+    SvgIcon,
   },
   props: {
     item: {
@@ -41,6 +47,7 @@ export default {
   data() {
     return {
       localQuantity: Number(this.item.quantity) || 1,
+      mdiCloseCircleOutline
     }
   },
   watch: {
@@ -86,12 +93,17 @@ export default {
   cursor: pointer;
 }
 
-.cart_item_remove {
-  background: #f3f5f3;
-  border: none;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
+.cart_remove_icon {
+  font-size: 1.6rem;
+  width: 1.4em;
+  height: 1.4em;
   cursor: pointer;
+  color: #d9534f;
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.cart_remove_icon:hover {
+  transform: scale(1.15);
+  color: #c9302c;
 }
 </style>
